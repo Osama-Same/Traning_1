@@ -23,7 +23,7 @@ async function _delete(id,tableName) {
 }
 
 async function _save(item,arr,tableName) {
-  console.log('item',item);
+  //console.log('item',item);
   const obj = _.pick(item, arr);
   let fieldsStr = "(";
   const objKeys =Object.keys(obj); 
@@ -47,6 +47,9 @@ async function _save(item,arr,tableName) {
   const sql = (item.id ==0)?`insert into ${tableName} ${fieldsStr} values ${valuesStr}`:`update ${tableName} set ${updatestr} where id = ${item.id}`
   console.log('sql',sql);
   const res = await axios.post(url, { operation: 1, sql: sql });
+  // console.log('res',res);
+  console.log('res.data',res.data);
+  toast(`${res.data.affectedRows} row updated successfully`)
   return res.data;
  }
 export default{
