@@ -8,7 +8,10 @@ import unitsService from "../../service/unitsService"
 import AutoCompleteSelect from '../common/AutoCompleteSelect'
 import CategoriesTreeView from '../categories/CategoriesTreeView';
 import CircularProgress from '@mui/material/CircularProgress';
+import StoreTable from "./StoreTable"
 import Box from '@mui/material/Box';
+import { KeyboardDoubleArrowLeft, KeyboardDoubleArrowRight } from "@mui/icons-material";
+import { IconButton, Button, Dialog, AppBar, Toolbar, Typography } from "@mui/material";
 //import  {CategoriesTreeView}  from '../categories/CategoriesAdminPage';
 export default function UsersStore({ user }) {
 
@@ -28,7 +31,7 @@ export default function UsersStore({ user }) {
     useEffect(() => {
         setLoading(true)
         update();
-    }, []);
+    }, [user]);
 
     async function update() {
         setLoading(true);
@@ -53,10 +56,8 @@ export default function UsersStore({ user }) {
                 product.unit = _allUnits.find(un => un.id == product.unitid)
             }
         })
-
-
-
         setUserProducts(_userProducts);
+        console.log(_userProducts)
         setBrands(_allBrands);
         setOrigin(_allOrigins);
         setcategories(_allCategories)
@@ -88,50 +89,50 @@ export default function UsersStore({ user }) {
                         >
                             <div className='row'>
                                 {showLeftDiv &&
-                                    <div className='col-4'>
-                                        <AutoCompleteSelect
-                                            textLabel='Brand'
-                                            options={brands}
-                                            selectedOption={selectedBrand}
-                                            onChange={(brand) => setselectedBrand(brand)}
-                                            labelOption='nameen'
-                                            labelImage='logo'
-                                        /><br></br>
-                                        <AutoCompleteSelect
-                                            textLabel='Origin'
-                                            options={origin}
-                                            selectedOption={selectedOrigin}
-                                            onChange={(origin) => setSelectedOrigin(origin)}
-                                            labelOption='nameen'
-                                            labelImage='flag'
-                                        /><br></br>
-                                        <CategoriesTreeView
-                                            className='m-2'
-                                            allowEdit={false}
-                                            categories={categories}
-                                            onSelect={(category) => {
-                                                if (category && category.products) {
-                                                    setdispProducts(category.products);
-                                                }
-                                                if (category && category.categorytype != 0)
-                                                    setselectedProductCategory(category)
-                                                else
-                                                    setselectedProductCategory(null)
-                                            }}
-                                        /* if (category && category.subcategories) {
-                                                    let result = []
-                                                    for (let i = 0; i < category.subcategories.length; i++) {
-                                                        let arr = category.subcategories[i].products
-                                                        for (let j = 0; j < arr.length; j++) {
-                                                            result.push(arr[j])
-                                                        }
-            
+                                    <>
+                                    <div></div>
+                                        <div className='col-4'>
+                                            <AutoCompleteSelect
+                                                textLabel='Brand'
+                                                options={brands}
+                                                selectedOption={selectedBrand}
+                                                onChange={(brand) => setselectedBrand(brand)}
+                                                labelOption='nameen'
+                                                labelImage='logo'
+                                            /><br></br>
+                                            <AutoCompleteSelect
+                                                textLabel='Origin'
+                                                options={origin}
+                                                selectedOption={selectedOrigin}
+                                                onChange={(origin) => setSelectedOrigin(origin)}
+                                                labelOption='nameen'
+                                                labelImage='flag'
+                                            /><br></br>
+                                            <CategoriesTreeView
+                                                className='m-2'
+                                                allowEdit={false}
+                                                categories={categories}
+                                                onSelect={(category) => {
+                                                    if (category && category.products) {
+                                                        setdispProducts(category.products);
                                                     }
-                                                    console.log("category.subcategories", result);
-                                                    //  setdispProducts(result)
-                                                } */
-                                        />
-                                    </div>}
+                                                    if (category && category.categorytype != 0)
+                                                        setselectedProductCategory(category)
+                                                    else
+                                                        setselectedProductCategory(null)
+                                                }}
+                                            />
+                                        </div>
+                                        </>}
+                                        <div className="col">
+                                            <>
+                                                <IconButton onClick={() => setshowLeftDiv(!showLeftDiv)}>
+                                                    {showLeftDiv ? <KeyboardDoubleArrowLeft /> : <KeyboardDoubleArrowRight />}
+                                                </IconButton>
+                                                <StoreTable userProducts={userProducts}  onUpdate={async () => { await update() }} />
+                                            </>
+                                        </div>
+                                    
                             </div>
                         </div>
                     }

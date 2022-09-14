@@ -11,19 +11,18 @@ export default function Brands({ user }) {
     useEffect(() => {
         setLoading(true)
         update();
-        setTimeout(() => {
-            setLoading(false)
-        }, 8000)
     }, []);
     const update = async () => {
+        setLoading(true)
         const _brands = await brandsService._get();
         const _products = await ProductsService._get()
-        
+
         _brands.forEach(brand => {
             brand.product = _products.filter(pr => pr.brandid === brand.id)
         });
         setBrands(_brands);
         setProducts(_products)
+        setLoading(false)
 
     }
     return (

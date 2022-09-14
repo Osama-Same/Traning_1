@@ -25,24 +25,40 @@ const Navigation = ({ user }) => {
 
                 <div className="collapse navbar-collapse" id="navbarNavDarkDropdown">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                        {user && <NavDropdown title="database" id="basic-nav-dropdown">
-                            {(user && (user.authorization === 'admin')) &&
-                                <>
-                                    <NavDropdown.Item href="origins">Origin</NavDropdown.Item>
-                                    <NavDropdown.Divider />
-                                    <NavDropdown.Item href="brands">Brands</NavDropdown.Item>
-                                    <NavDropdown.Divider />
-                                    <NavDropdown.Item href="product">Products</NavDropdown.Item>
-                                    <NavDropdown.Divider />
-                                    <NavDropdown.Divider />
-                                    <NavDropdown.Item href="categories">Categories</NavDropdown.Item>
-                                    <NavDropdown.Divider />
-                                    <NavDropdown.Item href="units">Units</NavDropdown.Item>
-                                    <NavDropdown.Divider />
-                                </>
-                            }
-                        </NavDropdown>}
+                        {user &&
+                            <>
+                                {(user && (user.authorization === 'admin')) &&
+                                    <NavDropdown title="database" id="basic-nav-dropdown">
 
+
+                                        <NavDropdown.Item href="origins">Origin</NavDropdown.Item>
+                                        <NavDropdown.Divider />
+                                        <NavDropdown.Item href="brands">Brands</NavDropdown.Item>
+                                        <NavDropdown.Divider />
+                                        <NavDropdown.Item href="product">Products</NavDropdown.Item>
+                                        <NavDropdown.Divider />
+                                        <NavDropdown.Divider />
+                                        <NavDropdown.Item href="categories">Categories</NavDropdown.Item>
+                                        <NavDropdown.Divider />
+                                        <NavDropdown.Item href="units">Units</NavDropdown.Item>
+                                        <NavDropdown.Divider />
+
+
+                                    </NavDropdown>
+                                }
+
+                                {user && (user.authorization === 'user') &&
+                                    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                                        <li className="nav-item">
+                                            <Link className="nav-link text-white" to={"/Home"}>
+                                                Home
+                                            </Link>
+                                        </li>
+
+                                    </ul>
+                                }
+                            </>
+                        }
                     </ul>
                     <div className="d-flex input-group w-auto">
                         {!user &&

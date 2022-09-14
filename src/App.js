@@ -10,7 +10,8 @@ import Origins from "./components/origin/Origins";
 import Brands from "./components/brand/Brand";
 import Products from "./components/product/Products";
 import Units from "./components/units/Units";
-import UsersStore from "./components/usersStore/usersStore"
+import UsersStore from "./components/usersStore/usersStore";
+import Home from "./components/home/Home";
 import { CategoriesAdminPage } from "./components/categories/CategoriesAdminPage";
 const App = () => {
   const [user, setUser] = useState({});
@@ -26,19 +27,20 @@ const App = () => {
     <BrowserRouter>
       <Navigation user={user} />
       <Routes>
-        <Route path="/origins" element={<Origins  user={user}/>} />
-        <Route path="/brands" element={<Brands  user={user}/>} />
+        <Route path="/origins" element={<Origins user={user} />} />
+        <Route path="/brands" element={<Brands user={user} />} />
         <Route path="/product" element={<Products user={user} />} />
         <Route
           path="/categories"
           element={<CategoriesAdminPage allowEdit={true} user={user} />}
         />
-        <Route path="/Units" element={<Units user={user}/>} />
+        <Route path="/Units" element={<Units user={user} />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/profile" element={<Profile user={user} />} />
         <Route path="/UsersStore" element={<UsersStore user={user} />} />
+        <Route path="/Home" element={<Home user={user} />} />
       </Routes>
     </BrowserRouter>
   );

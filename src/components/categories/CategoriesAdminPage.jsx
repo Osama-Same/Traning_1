@@ -13,7 +13,7 @@ export function CategoriesAdminPage() {
     }
     return (<div>
             <div className='row'>
-                <div className='col'>
+                <div className='col-6'>
                     <CategoriesTreeView
                         allowEdit={true}
                         setcategories={(category) => setselectedCategory(category)}

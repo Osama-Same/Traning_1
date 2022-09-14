@@ -39,9 +39,6 @@ export default function Products({ user }) {
     useEffect(() => {
         setLoading(true)
         update();
-        // setTimeout(() => {
-        //     setLoading(false)
-        // }, 5000)
     }, []);
     const update = async () => {
         setLoading(true);
@@ -64,7 +61,6 @@ export default function Products({ user }) {
             category.products = _products.filter(p => p.categoryid == category.id)
             //  category.subcategories = _products.filter(p => p.categoryid == category.parentid)
         })
-
 
         setSelectedProduct(null);
         setProducts(_products);

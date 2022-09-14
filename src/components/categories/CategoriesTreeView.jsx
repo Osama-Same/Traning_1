@@ -35,7 +35,7 @@ export default function CategoriesTreeView({ allowEdit, onSelect, categories, se
     const renderCategoryLabel = (category) => {
         const class_name = (category.categorytype === 1) ? 'row  bg-primary text-wrap' : 'row';
         const imgsrc = `${baseCategoriesURL}${category.id}.jpg`;
-        console.log(imgsrc);
+        //console.log(imgsrc);
         return (
             <div className={class_name}>
                 <div className='col-9'>
