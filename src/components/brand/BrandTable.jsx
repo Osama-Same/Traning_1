@@ -10,12 +10,15 @@ import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import ConfirmDeleteDialog from '../common/ConfirmDeleteDialog'
 import BrandForm from "./BrandForm"
-
 import brandsService from '../../service/brandsService';
+
+
+const baseCategoriesURL = 'http://www.tochangehybrid.com/groceriesImages/brands/';
 export default function BrandTable({ brands, setBrands }) {
     const [selectedBrand, setSelectedBrand] = useState(null);
     const [open, setOpen] = useState(false);
     const [openConfirmDelDlg, setopenConfirmDelDlg] = useState(false);
+
     return (
         <div>
             <TableContainer >
@@ -45,14 +48,17 @@ export default function BrandTable({ brands, setBrands }) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {brands.map((brand) =>
+                        { brands.map((brand) =>
+                         
                             <TableRow key={brand.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+     
                                 <TableCell align="center">{brand.id}</TableCell>
                                 <TableCell align="center">{brand.nameen}</TableCell>
                                 <TableCell align="center">{brand.namear}</TableCell>
                                 <TableCell align="center">{brand.descriptionen}</TableCell>
                                 <TableCell align="center">{brand.descriptionar}</TableCell>
-                                <TableCell align="center"><img src={brand.logo} alt={brand.logo} width={50} height={40} /></TableCell>
+                         
+                                <TableCell align="center"><img src={`${baseCategoriesURL}${brand.id}.jpg`} alt={brand.id} width={50} height={40} /></TableCell>
                                 <TableCell align="center">{brand.product && brand.product.length}</TableCell>
                                 <TableCell align="center">
                                     <Button

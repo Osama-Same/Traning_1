@@ -38,7 +38,7 @@ export default function CategoriesTreeView({ allowEdit, onSelect, categories, se
         //console.log(imgsrc);
         return (
             <div className={class_name}>
-                <div className='col-9'>
+                <div className='col-12'>
                     <List>
                         <ListItem disablePadding>
                             <ListItemIcon>

@@ -14,7 +14,7 @@ import UsersStore from "./components/usersStore/usersStore";
 import Home from "./components/home/Home";
 import { CategoriesAdminPage } from "./components/categories/CategoriesAdminPage";
 const App = () => {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
   useEffect(() => {
     update();
   }, []);
@@ -22,7 +22,7 @@ const App = () => {
     const _user = await getCurrentUser();
     setUser(_user);
   }
-  //console.log(user);
+  console.log('App user',user);
   return (
     <BrowserRouter>
       <Navigation user={user} />
@@ -40,7 +40,7 @@ const App = () => {
         <Route path="/logout" element={<Logout />} />
         <Route path="/profile" element={<Profile user={user} />} />
         <Route path="/UsersStore" element={<UsersStore user={user} />} />
-        <Route path="/Home" element={<Home user={user} />} />
+        <Route path="/" element={<Home user={user} />} />
       </Routes>
     </BrowserRouter>
   );

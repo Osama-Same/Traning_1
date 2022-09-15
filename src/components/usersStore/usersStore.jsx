@@ -11,8 +11,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 import StoreTable from "./StoreTable"
 import Box from '@mui/material/Box';
 import { KeyboardDoubleArrowLeft, KeyboardDoubleArrowRight } from "@mui/icons-material";
-import { IconButton, Button, Dialog, AppBar, Toolbar, Typography } from "@mui/material";
-//import  {CategoriesTreeView}  from '../categories/CategoriesAdminPage';
+import { IconButton } from "@mui/material";
+
 export default function UsersStore({ user }) {
 
     const [userProducts, setUserProducts] = useState([])
@@ -57,7 +57,6 @@ export default function UsersStore({ user }) {
             }
         })
         setUserProducts(_userProducts);
-        console.log(_userProducts)
         setBrands(_allBrands);
         setOrigin(_allOrigins);
         setcategories(_allCategories)
@@ -90,7 +89,7 @@ export default function UsersStore({ user }) {
                             <div className='row'>
                                 {showLeftDiv &&
                                     <>
-                                    <div></div>
+                                        <div></div>
                                         <div className='col-4'>
                                             <AutoCompleteSelect
                                                 textLabel='Brand'
@@ -108,6 +107,7 @@ export default function UsersStore({ user }) {
                                                 labelOption='nameen'
                                                 labelImage='flag'
                                             /><br></br>
+
                                             <CategoriesTreeView
                                                 className='m-2'
                                                 allowEdit={false}
@@ -123,16 +123,16 @@ export default function UsersStore({ user }) {
                                                 }}
                                             />
                                         </div>
-                                        </>}
-                                        <div className="col">
-                                            <>
-                                                <IconButton onClick={() => setshowLeftDiv(!showLeftDiv)}>
-                                                    {showLeftDiv ? <KeyboardDoubleArrowLeft /> : <KeyboardDoubleArrowRight />}
-                                                </IconButton>
-                                                <StoreTable userProducts={userProducts}  onUpdate={async () => { await update() }} />
-                                            </>
-                                        </div>
-                                    
+                                    </>}
+                                <div className="col">
+                                    <>
+                                        <IconButton onClick={() => setshowLeftDiv(!showLeftDiv)}>
+                                            {showLeftDiv ? <KeyboardDoubleArrowLeft /> : <KeyboardDoubleArrowRight />}
+                                        </IconButton>
+                                        <StoreTable userProducts={userProducts} onUpdate={async () => { await update() }} />
+                                    </>
+                                </div>
+
                             </div>
                         </div>
                     }
