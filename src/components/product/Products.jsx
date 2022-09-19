@@ -37,7 +37,6 @@ export default function Products({ user }) {
     const [allUsersProducts, setAllUsersProducts] = useState([]);
 
     useEffect(() => {
-        setLoading(true)
         update();
     }, []);
     const update = async () => {
@@ -77,166 +76,151 @@ export default function Products({ user }) {
         setLoading(false);
     }
     return (<div>
-        {loading ?
-            <Box sx={{
-                top: 0,
-                left: 0,
-                bottom: 0,
-                right: 0,
-                position: 'absolute',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-            }}>
-                <CircularProgress /> Loading...
-            </Box>
-            : <>
-                {user &&
+
+        {user &&
+            <>
+                {(user && (user.authorization === 'admin')) &&
                     <>
-                        {(user && (user.authorization === 'admin')) &&
-                            <>
-                                <div
-                                    className="container-fluid"
-                                    style={{ marginTop: "5%", marginBottom: "5%" }}
-                                >
-                                    <div className='row'>
-                                        <div className='col-4'>
+                        <div
+                            className="container-fluid"
+                            style={{ marginTop: "5%", marginBottom: "5%" }}
+                        >
+                            <div className='row'>
+                                <div className='col-4'>
 
-                                            <AutoCompleteSelect
-                                                textLabel='Brand'
-                                                options={brands}
-                                                selectedOption={selectedBrand}
-                                                onChange={(brand) => setselectedBrand(brand)}
-                                                labelOption='nameen'
-                                                labelImage='logo'
-                                            /><br></br>
-                                            <AutoCompleteSelect
-                                                textLabel='Origin'
-                                                options={origin}
-                                                selectedOption={selectedOrigin}
-                                                onChange={(origin) => setSelectedOrigin(origin)}
-                                                labelOption='nameen'
-                                                labelImage='flag'
-                                            />
-                                            <br />
-                                            <CategoriesTreeView
-                                                className='m-2'
-                                                allowEdit={false}
-                                                categories={categories}
-                                                onSelect={(category) => {
-                                                    if (category && category.products) {
-                                                        setdispProducts(category.products);
+                                    <AutoCompleteSelect
+                                        textLabel='Brand'
+                                        options={brands}
+                                        selectedOption={selectedBrand}
+                                        onChange={(brand) => setselectedBrand(brand)}
+                                        labelOption='nameen'
+                                        labelImage='logo'
+                                    /><br></br>
+                                    <AutoCompleteSelect
+                                        textLabel='Origin'
+                                        options={origin}
+                                        selectedOption={selectedOrigin}
+                                        onChange={(origin) => setSelectedOrigin(origin)}
+                                        labelOption='nameen'
+                                        labelImage='flag'
+                                    />
+                                    <br />
+                                    <CategoriesTreeView
+                                        className='m-2'
+                                        allowEdit={false}
+                                        categories={categories}
+                                        onSelect={(category) => {
+                                            if (category && category.products) {
+                                                setdispProducts(category.products);
+                                            }
+                                            if (category && category.categorytype != 0)
+                                                setselectedProductCategory(category)
+                                            else
+                                                setselectedProductCategory(null)
+                                        }}
+                                    /* if (category && category.subcategories) {
+                                                let result = []
+                                                for (let i = 0; i < category.subcategories.length; i++) {
+                                                    let arr = category.subcategories[i].products
+                                                    for (let j = 0; j < arr.length; j++) {
+                                                        result.push(arr[j])
                                                     }
-                                                    if (category && category.categorytype != 0)
-                                                        setselectedProductCategory(category)
-                                                    else
-                                                        setselectedProductCategory(null)
-                                                }}
-                                            /* if (category && category.subcategories) {
-                                                        let result = []
-                                                        for (let i = 0; i < category.subcategories.length; i++) {
-                                                            let arr = category.subcategories[i].products
-                                                            for (let j = 0; j < arr.length; j++) {
-                                                                result.push(arr[j])
-                                                            }
-                
-                                                        }
-                                                        console.log("category.subcategories", result);
-                                                        //  setdispProducts(result)
-                                                    } */
-                                            />
+        
+                                                }
+                                                console.log("category.subcategories", result);
+                                                //  setdispProducts(result)
+                                            } */
+                                    />
 
-                                        </div>
-                                        <div className='col'>
-                                            <TableContainer >
-                                                <Stack direction="row" spacing={2}>
-                                                    <Button
-                                                        variant="contained"
-                                                        disabled={(!selectedBrand || !selectedOrigin || !selectedProductCategory)}
-                                                        onClick={() => {
-                                                            setSelectedProduct({ id: 0, brandid: selectedBrand.id, originid: selectedOrigin.id, categoryid: selectedProductCategory.id, nameen: '', namear: '', descriptionen: '', descriptionar: '', image: '' });
-                                                            setOpenn(true);
-                                                        }}
-                                                    >
-                                                        <AddIcon color="white" />
-                                                    </Button>
-                                                </Stack>
-                                                <ProductTable
-                                                    user={user}
-                                                    products={dispProducts}
-                                                    units={units}
-                                                    allUsers={allUsers}
-                                                    allUsersProducts={allUsersProducts}
-                                                    onUpdate={async () => { await update() }} />
-
-                                                <ProductsDialog
-                                                    open={openn}
-                                                    setOpen={setOpenn}
-                                                    product={selectedProduct}
-                                                    units={units}
-                                                    onUpdate={async () => { await update() }} />
-
-                                            </TableContainer>
-                                        </div>
-                                    </div>
                                 </div>
-                            </>
-                        }
-                        {(user && (user.authorization === "user")) &&
-                            <>
-                                <div
-                                    className="container-fluid"
-                                    style={{ marginTop: "5%", marginBottom: "5%" }}
-                                >
-                                    <div className='row'>
-                                        <div className='col-3'>
-                                            <AutoCompleteSelect
-                                                textLabel='Brand'
-                                                options={brands}
-                                                selectedOption={selectedBrand}
-                                                onChange={(brand) => setselectedBrand(brand)}
-                                                labelOption='nameen'
-                                                labelImage='logo'
-                                            /><br></br>
-                                            <AutoCompleteSelect
-                                                textLabel='Origin'
-                                                options={origin}
-                                                selectedOption={selectedOrigin}
-                                                onChange={(origin) => setSelectedOrigin(origin)}
-                                                labelOption='nameen'
-                                                labelImage='flag'
-                                            />
-                                            <CategoriesTreeView
-                                                className='m-2'
-                                                allowEdit={false}
-                                                categories={categories}
-                                                onSelect={(category) => {
-                                                    if (category && category.products) {
-                                                        setdispProducts(category.products);
-                                                    }
-                                                    if (category && category.categorytype != 0)
-                                                        setselectedProductCategory(category)
-                                                    else
-                                                        setselectedProductCategory(null)
+                                <div className='col'>
+                                    <TableContainer >
+                                        <Stack direction="row" spacing={2}>
+                                            <Button
+                                                variant="contained"
+                                                disabled={(!selectedBrand || !selectedOrigin || !selectedProductCategory)}
+                                                onClick={() => {
+                                                    setSelectedProduct({ id: 0, brandid: selectedBrand.id, originid: selectedOrigin.id, categoryid: selectedProductCategory.id, nameen: '', namear: '', descriptionen: '', descriptionar: '', image: '' });
+                                                    setOpenn(true);
                                                 }}
-                                            />
-                                        </div>
-                                        <div className='col'>
-                                            <ProductTable
-                                                user={user}
-                                                products={dispProducts}
-                                                units={units}
-                                                allUsers={allUsers}
-                                                allUsersProducts={allUsersProducts}
-                                                onUpdate={async () => { await update() }} />
-                                        </div>
+                                            >
+                                                <AddIcon color="white" />
+                                            </Button>
+                                        </Stack>
+                                        <ProductTable
+                                            user={user}
+                                            products={dispProducts}
+                                            units={units}
+                                            allUsers={allUsers}
+                                            allUsersProducts={allUsersProducts}
+                                            onUpdate={async () => { await update() }} />
 
-                                    </div>
+                                        <ProductsDialog
+                                            open={openn}
+                                            setOpen={setOpenn}
+                                            product={selectedProduct}
+                                            units={units}
+                                            onUpdate={async () => { await update() }} />
+
+                                    </TableContainer>
                                 </div>
-                            </>}
+                            </div>
+                        </div>
+                    </>
+                }
+                {(user && (user.authorization === "user")) &&
+                    <>
+                        <div
+                            className="container-fluid"
+                            style={{ marginTop: "5%", marginBottom: "5%" }}
+                        >
+                            <div className='row'>
+                                <div className='col-3'>
+                                    <AutoCompleteSelect
+                                        textLabel='Brand'
+                                        options={brands}
+                                        selectedOption={selectedBrand}
+                                        onChange={(brand) => setselectedBrand(brand)}
+                                        labelOption='nameen'
+                                        labelImage='logo'
+                                    /><br></br>
+                                    <AutoCompleteSelect
+                                        textLabel='Origin'
+                                        options={origin}
+                                        selectedOption={selectedOrigin}
+                                        onChange={(origin) => setSelectedOrigin(origin)}
+                                        labelOption='nameen'
+                                        labelImage='flag'
+                                    />
+                                    <CategoriesTreeView
+                                        className='m-2'
+                                        allowEdit={false}
+                                        categories={categories}
+                                        onSelect={(category) => {
+                                            if (category && category.products) {
+                                                setdispProducts(category.products);
+                                            }
+                                            if (category && category.categorytype != 0)
+                                                setselectedProductCategory(category)
+                                            else
+                                                setselectedProductCategory(null)
+                                        }}
+                                    />
+                                </div>
+                                <div className='col'>
+                                    <ProductTable
+                                        user={user}
+                                        products={dispProducts}
+                                        units={units}
+                                        allUsers={allUsers}
+                                        allUsersProducts={allUsersProducts}
+                                        onUpdate={async () => { await update() }} />
+                                </div>
 
+                            </div>
+                        </div>
                     </>}
-            </>}
 
+            </>}
     </div>)
 }

@@ -10,6 +10,7 @@ import brandsService from '../../service/brandsService'
 import originsService from '../../service/originsService'
 import unitsService from '../../service/unitsService'
 import categoriesService from '../../service/categoriesService'
+import usersOrdersService from '../../service/usersOrdersService'
 import { CardActionArea, IconButton, CardActions } from '@mui/material';
 import CardHeader from '@mui/material/CardHeader';
 import Chip from '@mui/material/Chip';
@@ -21,11 +22,16 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Button from '@mui/material/Button';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import Typography from '@mui/material/Typography';
+import { Link } from "react-router-dom";
 import {
     MDBCard,
     MDBRow,
     MDBCol
 } from 'mdb-react-ui-kit';
+
+import TextField from "@mui/material/TextField";
+
 
 //===============================================================================
 function linkState(newState) {
@@ -43,6 +49,8 @@ function linkState(newState) {
         })
     })
 }
+
+
 //-------------------------------------------------------------------------------
 
 function UserCard({ mainState, setMainState, user }) {
@@ -93,8 +101,10 @@ function UserCard({ mainState, setMainState, user }) {
 //-------------------------------------------------------------------------------
 
 function ProductCard({ mainState, setMainState, userProduct }) {
+
     return (
         <>
+
             <Box
                 sx={{
                     width: 700,
@@ -102,7 +112,7 @@ function ProductCard({ mainState, setMainState, userProduct }) {
                     marginBottom: "5%",
                 }}
             >
-                <MDBCard style={{ maxWidth: '540px' }}>
+                <MDBCard >
                     <MDBRow className='g-0'>
                         <CardHeader
                             avatar={
@@ -146,12 +156,20 @@ function ProductCard({ mainState, setMainState, userProduct }) {
                                     <ListItemText primary={userProduct.product.category.publishednameen} />
                                 </ListItem>
                                 <ListItem button>
-                                    <ListItemAvatar>
-                                        <Avatar>
-                                            <Avatar alt="Remy Sharp" src={userProduct.product.brand.logo} />
-                                        </Avatar>
-                                    </ListItemAvatar>
-                                    <ListItemText primary={userProduct.product.brand.nameen} />
+                                    {userProduct &&
+                                        <>
+                                            {(userProduct && (userProduct.product.brand.nameen !== "none")) &&
+                                                <>
+                                                    <ListItemAvatar>
+                                                        <Avatar>
+                                                            <Avatar alt="Remy Sharp" src={userProduct.product.brand.logo} />
+                                                        </Avatar>
+                                                    </ListItemAvatar>
+                                                    <ListItemText primary={userProduct.product.brand.nameen} />
+                                                </>
+                                            }
+                                        </>
+                                    }
                                 </ListItem>
                                 <ListItem button  >
                                     <ListItemAvatar>
@@ -164,7 +182,15 @@ function ProductCard({ mainState, setMainState, userProduct }) {
                                 <ListItem button>
                                     <CardActions disableSpacing>
                                         <ListItemAvatar>
-                                            <AddShoppingCartIcon color='primary' />
+                                            {mainState.currentOrder &&
+                                                <>
+                                                    {mainState && (mainState.currentOrder !== null) &&
+                                                        <>
+                                                            <AddShoppingCartIcon color='primary' />
+                                                        </>
+                                                    }
+                                                </>
+                                            }
                                             <FavoriteIcon color='error' />
                                         </ListItemAvatar>
                                         <Button size="small">Learn More</Button>
@@ -185,8 +211,10 @@ function ProductCard({ mainState, setMainState, userProduct }) {
     )
 
 }
+
 //-------------------------------------------------------------------------------
 function ItemCard({ mainState, setMainState, item }) {
+
     let disp = <div></div>
     if (mainState.stage == 'user') {
         disp = <UserCard mainState={mainState} setMainState={setMainState} user={item} />
@@ -216,8 +244,8 @@ function RenderState({ mainState, setMainState }) {
     else if (mainState.stage == 'product') {
         renderArr = mainState.selectedUser.userProducts;
     }
-    else return (
-        <div>No Valid Stage</div>
+    else if (mainState.stage == 'order') return (
+        <OrderForm mainState={mainState} setMainState={setMainState} />
     )
 
     return (
@@ -234,33 +262,176 @@ function RenderState({ mainState, setMainState }) {
 
 }
 // ------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+const OrderForm = ({ mainState, setMainState }) => {
+    const [clientname, setClientname] = useState(mainState.currentOrder ? mainState.currentOrder.clientname : "")
+    const [clienttel, setclienttel] = useState(mainState.currentOrder ? mainState.currentOrder.clienttel : "")
+    const [startdate, setStartdate] = useState(mainState.currentOrder ? mainState.currentOrder.startdate : "")
+    console.log(mainState.currentOrder.startdate)
+    return (<div>
+        <div style={{ marginTop: "100px" }}>
+            <div className='container' >
+                <div className='row'>
+                    <div className='col-4'></div>
+                    <div className='col-6'>
+                        <Box
+                            sx={{
+                                width: 500,
+                                maxWidth: "100%",
+                                marginBottom: "5%",
+                            }}
+                        >
+                            <TextField
+                                fullWidth
+                                label="Client Name"
+                                onChange={(e) => setClientname(e.target.value)}
+                                name="clientname"
+                                value={clientname}
+                            />
+                        </Box>
+                        <Box
+                            sx={{
+                                width: 500,
+                                maxWidth: "100%",
+                                marginBottom: "5%",
+                            }}
+                        >
+                            <TextField
+                                fullWidth
+                                label="Client Tel"
+                                onChange={(e) => setclienttel(e.target.value)}
+                                name="clienttel"
+                                value={clienttel}
+                            />
+                        </Box>
+                        <Box
+                            sx={{
+                                width: 500,
+                                maxWidth: "100%",
+                                marginBottom: "5%",
+                            }}
+                        >
+                            <TextField
+                                fullWidth
+                                label="Date"
+                                name="startdate"
+                                onChange={(e) => setStartdate(mainState.currentOrder.startdate)}
+                                disabled
+                                value={(mainState.currentOrder) && (mainState.currentOrder.startdate) && (startdate)}
+
+                            />
+                        </Box>
+
+                        <Button
+                            onClick={ () => {
+                                mainState.currentOrder = { id: 0, clientname: clientname, clienttel: clienttel, startdate: startdate , userprofileid : mainState.selectedUser.id};
+                                usersOrdersService._save(mainState.currentOrder)
+                                mainState.stage = 'product';
+                                setMainState({ ...mainState })
+                            }}
+                        >
+                            Submit
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    )
+}
+//------------------------------------------------------------------------------
+const NavbarProduct = ({ mainState, setMainState }) => {
+
+
+    return (
+        <div className="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div className="container-fluid">
+                <Link className="navbar-brand mt-3 mt-lg-0 text-info" to={"/"}>
+
+                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                        <IconButton sx={{ p: 0 }}>
+                            <Avatar alt="Remy Sharp" src={mainState.selectedUser.logo} />
+                        </IconButton>
+                        <IconButton
+                            sx={{ color: "white" }}
+                            onClick={() => {
+                                const newState = { ...mainState };
+                                newState.stage = 'user';
+                                setMainState(newState);
+                            }}
+                        >
+                            {mainState.selectedUser.publishednameen}
+                        </IconButton>
+                    </Typography>
+                </Link>
+                <button
+                    className="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavDarkDropdown"
+                    aria-controls="navbarNavDarkDropdown"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                >
+                    <span className="navbar-toggler-icon"></span>
+                </button>
+
+                <div className="d-flex input-group w-auto">
+                    {mainState.currentOrder &&
+                        <>
+                            {mainState && (mainState.currentOrder !== null) &&
+                                <>
+                                    <IconButton
+                                        color="primary"
+                                        onClick={() => {
+                                            mainState.stage = 'order';
+                                            setMainState({ ...mainState });
+                                        }}
+                                    >
+                                        <AddShoppingCartIcon />
+                                    </IconButton>
+                                </>
+                            }
+
+                        </>
+                    }
+
+                    <Button color="inherit">
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() => {
+                                mainState.currentOrder = { id: 0, clientname: '', clienttel: '', userid: mainState.selectedUser.id, startdate: new Date().toString() }
+                                mainState.stage = 'order';
+                                setMainState({ ...mainState });
+                            }}
+                        >
+                            Order
+                        </Button>
+                    </Button>
+                </div>
+            </div>
+
+        </div >
+    )
+
+}
+
 //-------------------------------------------------------------------------------
 function MainToolBar({ mainState, setMainState }) {
     if (!mainState) return <div>No State</div>
-
     let disp = <div></div>
-    if (mainState.stage == 'user') {
+
+    if (!mainState.selectedUser) {
         disp = <div>
             Select a user
         </div>
 
     }
-    else if (mainState.stage == 'product') {
-
+    else if (mainState.selectedUser) {
         disp = <div>
-            <div>
-                <IconButton
-                    onClick={() => {
-                        const newState = { ...mainState };
-                        newState.stage = 'user';
-                        setMainState(newState);
-                    }}
-                >
-                    {mainState.selectedUser.publishednameen}
-                </IconButton>
-            </div>
-            Select a product
-        </div>
+            <NavbarProduct mainState={mainState} setMainState={setMainState} /></div>
     }
 
     return (
@@ -278,7 +449,8 @@ const Home = ({ user }) => {
     useEffect(() => {
         setLoading(true)
         update()
-    }, [])
+    }, [user])
+    console.log('user from home',user);
     const update = async () => {
         setLoading(true);
         const _allUsersProfiles = await registerdUsersService._get();
@@ -296,12 +468,16 @@ const Home = ({ user }) => {
         newMainState.allCategories = _allCategories;
         const _allUnits = await unitsService._get();
         newMainState.allUnits = _allUnits;
+        const _allUsersOrders = usersOrdersService._get()
+        newMainState.allUsersOrders = _allUsersOrders
+        newMainState.currentOrder = null;
         linkState(newMainState);
         if (!user)
             newMainState.stage = 'user';
 
-        else {
-            newMainState.selectedUser = newMainState.allUsers.find(u => u.id == user.userid);
+        if (user&&(user.authorization =='user')){
+            // console.log('newMainState.selectedUser',newMainState.selectedUser);
+            newMainState.selectedUser = _allUsersProfiles.find(u => u.userid == user.id);
             newMainState.stage = 'product';
         }
 
@@ -327,6 +503,7 @@ const Home = ({ user }) => {
                 :
                 <div>
                     <MainToolBar mainState={mainState} setMainState={setMainState} />
+
                     <div className='container-fluid' style={{ marginTop: "5%", marginBottom: "5%" }}>
                         <RenderState mainState={mainState} setMainState={setMainState} />
                     </div>

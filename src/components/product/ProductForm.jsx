@@ -12,22 +12,28 @@ import MenuItem from '@mui/material/MenuItem';
 import Button from "@mui/material/Button";
 import productsService from '../../service/productsService'
 const ProductForm = ({ open, setOpen, product, units, onUpdate }) => {
- const [image, setImage,] = useState(product ? product.image : '');
+  const [originid, setOriginid] = useState(product ? product.originid : '');
+  const [brandid, setBrandid] = useState(product ? product.brandid : '');
+  const [categoryid, setCategoryid] = useState(product ? product.categoryid : '');
+  const [unitid, setUnitid] = useState(product ? product.unitid : '');
+  const [image, setImage] = useState(product ? product.image : '');
   const [descriptionen, setdescriptionen] = useState(product ? product.descriptionen : '');
   const [descriptionar, setdescriptionar] = useState(product ? product.descriptionar : '');
   const [barcode, setBarcode] = useState(product ? product.barcode : '')
-  const [selectedUnit, setselectedUnit] = useState(null);
-
+  const [loading, setloading] = useState(false)
   const [quantity, setQuantity] = useState(product ? product.quantity : '')
   useEffect(() => {
     console.log('product', product);
     if (!product) return;
+    setCategoryid(product.categoryid);
+    setBrandid(product.brandid)
     setImage(product.image);
     setdescriptionen(product.descriptionen);
     setdescriptionar(product.descriptionar);
     setBarcode(product.barcode);
     setQuantity(product.quantity);
-    setselectedUnit(units.find(u => u.id == product.unitid))
+    setUnitid(product.unitid);
+    setOriginid(product.originid)
   }, [product]);
 
   const handleClose = () => {
@@ -36,13 +42,59 @@ const ProductForm = ({ open, setOpen, product, units, onUpdate }) => {
   return (
     <div>
       {open && product && (
+        
         <Dialog open={open} onClose={handleClose}>
           <DialogContent>
             <DialogContentText sx={{ marginBottom: "5%", color: "black" }}>
               Product Form
             </DialogContentText>
-        
-          
+            <Box
+              sx={{
+                width: 500,
+                maxWidth: "100%",
+                marginBottom: "5%",
+              }}
+            >
+              <TextField
+                fullWidth
+                label="originid"
+                disabled
+                onChange={(e) => setOriginid(e.target.value)}
+                name="originid"
+                value={originid}
+              />
+            </Box>
+            <Box
+              sx={{
+                width: 500,
+                maxWidth: "100%",
+                marginBottom: "5%",
+              }}
+            >
+              <TextField
+                fullWidth
+                label="brandid"
+                disabled
+                onChange={(e) => setBrandid(e.target.value)}
+                name="brandid"
+                value={brandid}
+              />
+            </Box>
+            <Box
+              sx={{
+                width: 500,
+                maxWidth: "100%",
+                marginBottom: "5%",
+              }}
+            >
+              <TextField
+                fullWidth
+                label="categoryid"
+                onChange={(e) => setCategoryid(e.target.value)}
+                name="categoryid"
+                value={categoryid}
+              />
+            </Box>
             <Box
               sx={{
                 width: 500,
@@ -117,8 +169,8 @@ const ProductForm = ({ open, setOpen, product, units, onUpdate }) => {
                   id="demo-simple-select"
                   label="selectedUnit"
                   name='selectedUnit'
-                  onChange={(e) => setselectedUnit(e.target.value)}
-                  value={selectedUnit}
+                  onChange={(e) => setUnitid(e.target.value)}
+                  value={unitid}
                 >
                   {units.map((e) => {
                     return <MenuItem value={e.id}>{e.nameen}</MenuItem>
@@ -147,13 +199,15 @@ const ProductForm = ({ open, setOpen, product, units, onUpdate }) => {
             <Button
               onClick={async () => {
                 setOpen(false);
-     
+                product.brandid = originid;
+                product.brandid = brandid;
                 product.image = image;
                 product.descriptionen = descriptionen;
                 product.descriptionar = descriptionar;
                 product.barcode = barcode;
                 product.quantity = quantity;
-                product.unitid = selectedUnit.id;
+                product.unitid = unitid;
+                product.categoryid = categoryid;
                 await productsService._save(product);
                 onUpdate()
               }

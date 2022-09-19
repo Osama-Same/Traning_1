@@ -13,7 +13,7 @@ import AccessibilityIcon from '@mui/icons-material/Accessibility';
 import ProductUsersList from "./productUsersList"
 import usersProductsService from "../../service/usersProductsService"
 import Checkbox from '@mui/material/Checkbox';
-
+const baseImagesURL = 'http://www.tochangehybrid.com/groceriesImages/products/'
 
 export default function ProductTable({ products, units, onUpdate, allUsers, allUsersProducts, user }) {
     const myProducts = allUsersProducts.filter(p => p.userid == user.id);
@@ -22,8 +22,8 @@ export default function ProductTable({ products, units, onUpdate, allUsers, allU
     const [open, setOpen] = useState(false);
     const [openList, setOpenList] = useState(false);
     const [openConfirmDelDlg, setopenConfirmDelDlg] = useState(false);
-    console.log("selectedProduct", selectedProduct)
-    console.log("user", user)
+    //console.log("selectedProduct", selectedProduct)
+    //console.log("user", user)
 
     return (<div>
 
@@ -93,7 +93,7 @@ export default function ProductTable({ products, units, onUpdate, allUsers, allU
                         <TableCell align="center"> {product.barcode}</TableCell>
                         <TableCell align="center"> {product.descriptionen}</TableCell>
                         <TableCell align="center"> {product.descriptionar}</TableCell>
-                        <TableCell align="center"> <img src={product.image} alt='url' width={80} height={50} /></TableCell>
+                        <TableCell align="center"> <img src={`${baseImagesURL}${product.id}.jpg`} alt='url' width={80} height={50} /></TableCell>
                         {(user && (user.authorization === 'admin')) &&
                             <TableCell align="center">
                                 <IconButton

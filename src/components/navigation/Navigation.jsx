@@ -48,14 +48,20 @@ const Navigation = ({ user }) => {
                                 }
 
                                 {user && (user.authorization === 'user') &&
-                                    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                                        <li className="nav-item">
-                                            <Link className="nav-link text-white" to={"/Home"}>
-                                                Home
+                                    <>
+                                        <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                                            <li className="nav-item">
+                                                <Link className="nav-link text-white" to={"/"}>
+                                                    Home
+                                                </Link>
+                                            </li>
+                                        </ul>
+                                        <div className="d-flex input-group w-auto">
+                                            <Link className="nav-link text-white" to={"/OrderUser"}>
+                                                Order User
                                             </Link>
-                                        </li>
-
-                                    </ul>
+                                        </div>
+                                    </>
                                 }
                             </>
                         }
@@ -81,7 +87,8 @@ const Navigation = ({ user }) => {
                                     {(user && (user.authorization === "admin")) &&
                                         <Fragment>
                                             <NavDropdown.Item href="logout">Logout</NavDropdown.Item>
-                                        </Fragment>}
+                                        </Fragment>
+                                    }
                                 </NavDropdown>/
 
                             </>}

@@ -11,10 +11,12 @@ import AddIcon from "@mui/icons-material/Add";
 import ConfirmDeleteDialog from '../common/ConfirmDeleteDialog'
 import OriginForm from './OriginForm'
 import originsService from '../../service/originsService';
+const baseImagesURL = 'http://www.tochangehybrid.com/groceriesImages/origins/';
 export default function OriginTable({ origins, setOrigins }) {
     const [selectedOrigin, setSelectedOrigin] = useState(null);
     const [open, setOpen] = useState(false);
     const [openConfirmDelDlg, setopenConfirmDelDlg] = useState(false);
+
     return (<div>
         <TableContainer >
             <Stack direction="row" spacing={2}>
@@ -46,7 +48,7 @@ export default function OriginTable({ origins, setOrigins }) {
                             <TableCell align="center">{origin.id}</TableCell>
                             <TableCell align="center">{origin.nameen}</TableCell>
                             <TableCell align="center">{origin.namear}</TableCell>
-                            <TableCell align="center"><img src={origin.flag} alt={origin.flag} width={50} height={40} /></TableCell>
+                            <TableCell align="center"><img src={`${baseImagesURL}${origin.id}.jpg`} alt={origin.flag} width={50} height={40} /></TableCell>
                             <TableCell align="center">{origin.product && origin.product.length}</TableCell>
                             <TableCell align="center">
                                 <Button
@@ -64,7 +66,7 @@ export default function OriginTable({ origins, setOrigins }) {
                                 <Button
                                     variant="contained"
                                     color="error"
-                                     disabled={origin.product && (origin.product.length > 0)}
+                                    disabled={origin.product && (origin.product.length > 0)}
                                     onClick={async () => {
                                         setSelectedOrigin(origin);
                                         setopenConfirmDelDlg(true);

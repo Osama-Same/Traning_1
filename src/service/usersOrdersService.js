@@ -1,6 +1,6 @@
 import httpService from "./httpService";
-const tableName = "products";
-const arr = ["barcode", "descriptionen", "descriptionar","image","originid",'brandid','categoryid','quantity','unitid'];
+const tableName = "usersorders";
+const arr = ["clientname" , "clienttel" ,"userprofileid" ,"startdate"] ;
 
 async function _get() {
   return await httpService._get(tableName);  
@@ -9,7 +9,6 @@ async function _delete(id) {
   await httpService._delete(id,tableName);
 }
 async function _save(item) {
-  console.log("item",item)
   await httpService._save(item,arr,tableName)
  }
 export default{

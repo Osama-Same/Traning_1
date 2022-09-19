@@ -5,31 +5,31 @@ import MyTextField from '../common/myTextField';
 import AutoCompleteSelect from '../common/AutoCompleteSelect'
 import productsService from "../../service/productsService"
 function ProductsDialog({ open, setOpen, product, units, onUpdate }) {
-    const [nameen, setNameen] = useState(product ? product.nameen : '');
-    const [namear, setNamear,] = useState(product ? product.namear : '');
-    const [image, setImage,] = useState(product ? product.image : '');
-    const [descriptionen, setdescriptionen] = useState(product ? product.descriptionen : '');
-    const [descriptionar, setdescriptionar] = useState(product ? product.descriptionar : '');
-    const [barcode, setBarcode] = useState(product ? product.barcode : '')
-    const [selectedUnit, setselectedUnit] = useState(null);
-    const [quantity, setQuantity] = useState(product ? product.quantity : '')
-  
-    useEffect(() => {
-      console.log('product', product);
-      if (!product) return;
-      setNameen(product.nameen);
-      setNamear(product.namear);
-      setImage(product.image);
-      setdescriptionen(product.descriptionen);
-      setdescriptionar(product.descriptionar);
-      setBarcode(product.barcode);
-      setQuantity(product.quantity);
-      setselectedUnit(units.find(u => u.id == product.unitid))
-    }, [product]);
-  
-    return (
-  <div>
-    {product &&  <Dialog
+  const [nameen, setNameen] = useState(product ? product.nameen : '');
+  const [namear, setNamear,] = useState(product ? product.namear : '');
+  const [image, setImage,] = useState(product ? product.image : '');
+  const [descriptionen, setdescriptionen] = useState(product ? product.descriptionen : '');
+  const [descriptionar, setdescriptionar] = useState(product ? product.descriptionar : '');
+  const [barcode, setBarcode] = useState(product ? product.barcode : '')
+  const [selectedUnit, setselectedUnit] = useState(null);
+  const [quantity, setQuantity] = useState(product ? product.quantity : '')
+
+  useEffect(() => {
+    console.log('product', product);
+    if (!product) return;
+    setNameen(product.nameen);
+    setNamear(product.namear);
+    setImage(product.image);
+    setdescriptionen(product.descriptionen);
+    setdescriptionar(product.descriptionar);
+    setBarcode(product.barcode);
+    setQuantity(product.quantity);
+    setselectedUnit(units.find(u => u.id == product.unitid))
+  }, [product]);
+
+  return (
+    <div>
+      {open && product && <Dialog
         fullScreen
         open={open}
       >
@@ -65,7 +65,7 @@ function ProductsDialog({ open, setOpen, product, units, onUpdate }) {
             </Button>
           </Toolbar>
         </AppBar>
-  
+
         <div>
           <MyTextField label={'Brand Id'} disabled value={product ? product.brandid : '***'} />
           <MyTextField label={'Origin id'} disabled value={product ? product.originid : '***'} />
@@ -84,7 +84,7 @@ function ProductsDialog({ open, setOpen, product, units, onUpdate }) {
           <MyTextField label={' descriptionar '} placeholder={'* descriptionar'} value={descriptionar} setValue={setdescriptionar} rows={4} multiline />
         </div>
       </Dialog>}
-      </div>
-    )
-  }
-  export default ProductsDialog
+    </div>
+  )
+}
+export default ProductsDialog

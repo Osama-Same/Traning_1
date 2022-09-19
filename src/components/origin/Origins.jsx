@@ -9,13 +9,10 @@ export default function Origins({ user }) {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(false)
     useEffect(() => {
-        setLoading(true)
         update();
-        setTimeout(() => {
-            setLoading(false)
-        }, 8000)
     }, []);
     const update = async () => {
+        setLoading(true)
         const _origins = await originsService._get();
         const _products = await ProductsService._get()
         _origins.forEach(origin => {
@@ -23,6 +20,7 @@ export default function Origins({ user }) {
         });
         setOrigins(_origins);
         setProducts(_products)
+        setLoading(false)
     }
     return (
         <div>
