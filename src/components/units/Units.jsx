@@ -10,15 +10,14 @@ export default function Units({ user }) {
     useEffect(() => {
         setLoading(true)
         update();
-        setTimeout(() => {
-            setLoading(false)
-        }, 8000)
+
     }, []);
     const update = async () => {
+        setLoading(true)
         const _units = await unitsService._get();
-
         console.log(_units);
         setUnits(_units);
+        setLoading(false)
     }
     return (
         <div>

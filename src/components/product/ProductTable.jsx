@@ -27,7 +27,7 @@ export default function ProductTable({ products, units, onUpdate, allUsers, allU
 
     return (<div>
 
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table stickyHeader sx={{ maxHeight: 440 }} aria-label="sticky table">
             <TableHead>
                 <TableRow>
                     <TableCell align="center">id</TableCell>

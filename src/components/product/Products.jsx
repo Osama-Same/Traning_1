@@ -15,8 +15,6 @@ import ProductsDialog from './ProductsDialog';
 import usersProductsService from "../../service/usersProductsService"
 import registerdUsersService from "../../service/registerdUsersService"
 
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
 export default function Products({ user }) {
     console.log(user)
     const [selectedProductCategory, setselectedProductCategory] = useState(null)
@@ -58,7 +56,7 @@ export default function Products({ user }) {
         })
         _categories.forEach(category => {
             category.products = _products.filter(p => p.categoryid == category.id)
-            //  category.subcategories = _products.filter(p => p.categoryid == category.parentid)
+            category.subcategories = _products.filter(p => p.categoryid == category.parentid)
         })
 
         setSelectedProduct(null);
@@ -106,7 +104,8 @@ export default function Products({ user }) {
                                     />
                                     <br />
                                     <CategoriesTreeView
-                                        className='m-2'
+                                    
+                                    className='m-2'
                                         allowEdit={false}
                                         categories={categories}
                                         onSelect={(category) => {
@@ -118,6 +117,7 @@ export default function Products({ user }) {
                                             else
                                                 setselectedProductCategory(null)
                                         }}
+                                    
                                     /* if (category && category.subcategories) {
                                                 let result = []
                                                 for (let i = 0; i < category.subcategories.length; i++) {

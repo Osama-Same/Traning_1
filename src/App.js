@@ -12,7 +12,6 @@ import Products from "./components/product/Products";
 import Units from "./components/units/Units";
 import UsersStore from "./components/usersStore/usersStore";
 import Home from "./components/home/Home";
-import OrderUser from "./components/orderUser/orderUser";
 import { CategoriesAdminPage } from "./components/categories/CategoriesAdminPage";
 const App = () => {
   const [user, setUser] = useState(null);
@@ -23,7 +22,7 @@ const App = () => {
     const _user = await getCurrentUser();
     setUser(_user);
   }
-  console.log("App user", user);
+  
   return (
     <BrowserRouter>
       <Navigation user={user} />
@@ -42,10 +41,11 @@ const App = () => {
         <Route path="/profile" element={<Profile user={user} />} />
         <Route path="/UsersStore" element={<UsersStore user={user} />} />
         <Route path="/" element={<Home user={user} />} />
-        <Route path="/OrderUser" element={<OrderUser user={user} />} />
+   
       </Routes>
     </BrowserRouter>
   );
 };
+
 
 export default App;

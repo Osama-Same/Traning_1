@@ -10,13 +10,13 @@ import Button from "@mui/material/Button";
 
 const UnitsForm = ({ open, setOpen, unit, onUpdate }) => {
     const [nameen, setNameen] = useState(unit ? unit.nameen : '');
-    const [namear, setNamear,] = useState(unit ? unit.namear : '');
+    const [namear, setNamear] = useState(unit ? unit.namear : '');
     useEffect(() => {
         if (!unit) return;
         setNameen(unit.nameen);
         setNamear(unit.namear);
-
     }, [unit]);
+ 
     const handleClose = () => {
         setOpen(false);
     };
@@ -60,6 +60,7 @@ const UnitsForm = ({ open, setOpen, unit, onUpdate }) => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
+                 
                     <Button
                         onClick={async () => {
                             setOpen(false);

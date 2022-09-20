@@ -29,7 +29,7 @@ export default function CategoriesTreeView({ allowEdit, onSelect, categories, se
         setallCategories(_allCategories)
         setbaseCategories(_allCategories.filter(c => c.parentid === 0))
     }, [categories])
-    console.log(allCategories)
+   // console.log(allCategories)
 
     const renderCategoryLabel = (category) => {
         const class_name = (category.categorytype === 1) ? 'row  bg-primary text-wrap' : 'row';
@@ -37,7 +37,7 @@ export default function CategoriesTreeView({ allowEdit, onSelect, categories, se
         //console.log(imgsrc);
         return (
             <div className={class_name}>
-                <div className='col-12'>
+                <div className='col-10'>
                     <List>
                         <ListItem disablePadding>
                             <ListItemIcon>

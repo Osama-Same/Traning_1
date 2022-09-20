@@ -11,8 +11,8 @@ export default function Login() {
         <div style={{ marginTop: "100px" }}>
             <div className='container' >
                 <div className='row'>
-                    <div className='col-4'></div>
-                    <div className='col-6'>
+                    <div className='col-2'></div>
+                    <div className='col-8'>
                         <DialogContentText sx={{ marginBottom: "5%", color: "black" }}>
                             Login Form
                         </DialogContentText>

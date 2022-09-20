@@ -1,5 +1,4 @@
 import React, { Fragment } from "react";
-import Nav from 'react-bootstrap/Nav';
 import { Link } from "react-router-dom";
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
@@ -15,84 +14,126 @@ const Navigation = ({ user }) => {
                     className="navbar-toggler"
                     type="button"
                     data-bs-toggle="collapse"
-                    data-bs-target="#navbarNavDarkDropdown"
-                    aria-controls="navbarNavDarkDropdown"
+                    data-bs-target="#navbarNavDarkDropdown1"
+                    aria-controls="navbarNavDarkDropdown1"
                     aria-expanded="false"
                     aria-label="Toggle navigation"
                 >
                     <span className="navbar-toggler-icon"></span>
                 </button>
 
-                <div className="collapse navbar-collapse" id="navbarNavDarkDropdown">
-                    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                        {user &&
-                            <>
-                                {(user && (user.authorization === 'admin')) &&
-                                    <NavDropdown title="database" id="basic-nav-dropdown">
+                <div className="collapse navbar-collapse" id="navbarNavDarkDropdown1">
 
+                    {user &&
+                        <>
 
-                                        <NavDropdown.Item href="origins">Origin</NavDropdown.Item>
-                                        <NavDropdown.Divider />
-                                        <NavDropdown.Item href="brands">Brands</NavDropdown.Item>
-                                        <NavDropdown.Divider />
-                                        <NavDropdown.Item href="product">Products</NavDropdown.Item>
-                                        <NavDropdown.Divider />
-                                        <NavDropdown.Divider />
-                                        <NavDropdown.Item href="categories">Categories</NavDropdown.Item>
-                                        <NavDropdown.Divider />
-                                        <NavDropdown.Item href="units">Units</NavDropdown.Item>
-                                        <NavDropdown.Divider />
-
-
-                                    </NavDropdown>
-                                }
-
-                                {user && (user.authorization === 'user') &&
-                                    <>
-                                        <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                                            <li className="nav-item">
-                                                <Link className="nav-link text-white" to={"/"}>
-                                                    Home
-                                                </Link>
-                                            </li>
-                                        </ul>
-                                        <div className="d-flex input-group w-auto">
-                                            <Link className="nav-link text-white" to={"/OrderUser"}>
-                                                Order User
+                            {(user && (user.authorization === 'admin')) &&
+                                <>
+                                    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                                        <li className="nav-item">
+                                            <Link className="nav-link text-white" to={"/origins"}>
+                                                Origin
                                             </Link>
-                                        </div>
-                                    </>
-                                }
-                            </>
-                        }
-                    </ul>
-                    <div className="d-flex input-group w-auto">
-                        {!user &&
-                            <Fragment>
-                                <Nav.Link href="/login" style={{ color: "white" }}>Login</Nav.Link>/
-                                <Nav.Link href='/register' style={{ color: "white" }}>Register</Nav.Link>
-                            </Fragment>}
+                                        </li>
+                                        <li className="nav-item">
+                                            <Link className="nav-link text-white" to={"/brands"}>
+                                                Brands
+                                            </Link>
+                                        </li>
+                                        <li className="nav-item">
+                                            <Link className="nav-link text-white" to={"/product"}>
+                                                Products
+                                            </Link>
+                                        </li>
+                                        <li className="nav-item">
+                                            <Link className="nav-link text-white" to={"/Units"}>
+                                                Units
+                                            </Link>
+                                        </li>
+                                        <li className="nav-item">
+                                            <Link className="nav-link text-white" to={"/categories"}>
+                                                Categories
+                                            </Link>
+                                        </li>
+                                    </ul>
+                                    <div className="d-flex input-group w-auto">
+                                        <NavDropdown title={user.name} id="basic-nav-dropdown" style={{ color: "white" }}>
+                                            <Fragment>
+                                                <NavDropdown.Item href="logout">Logout</NavDropdown.Item>
+                                            </Fragment>
+                                        </NavDropdown>
+                                    </div>
+                                </>
 
-                        {user &&
-                            <>
-                                <NavDropdown title={user.name} id="basic-nav-dropdown" style={{ color: "white" }}>
-                                    {(user && (user.authorization === "user")) &&
-                                        <Fragment>
-                                            <NavDropdown.Item href="product">product</NavDropdown.Item>
-                                            <NavDropdown.Item href="UsersStore">Store</NavDropdown.Item>
-                                            <NavDropdown.Item href="profile">Pofile</NavDropdown.Item>
-                                            <NavDropdown.Item href="logout">Logout</NavDropdown.Item>
+                            }
+                        </>
+                    }
+                    {user &&
+                        <>
+                            {(user && (user.authorization === 'user')) &&
+                                <>
+                                    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                                        <li className="nav-item">
+                                            <Link className="nav-link text-white" to={"/"}>
+                                                Home
+                                            </Link>
+                                        </li>
+                                        <li className="nav-item">
+                                            <Link className="nav-link text-white" to={"/product"}>
+                                                Products
+                                            </Link>
+                                        </li>
+                                        <li className="nav-item">
+                                            <Link className="nav-link text-white" to={"/product"}>
+                                                Products
+                                            </Link>
+                                        </li>
+                                        <li className="nav-item">
+                                            <Link className="nav-link text-white" to={"/UsersStore"}>
+                                                Users Store
+                                            </Link>
+                                        </li>
 
-                                        </Fragment>}
-                                    {(user && (user.authorization === "admin")) &&
-                                        <Fragment>
-                                            <NavDropdown.Item href="logout">Logout</NavDropdown.Item>
-                                        </Fragment>
-                                    }
-                                </NavDropdown>/
+                                    </ul>
+                                    <div className="d-flex input-group w-auto">
+                                        <NavDropdown title={user.name} id="basic-nav-dropdown" style={{ color: "white" }}>
+                                            <Fragment>
+                                                <NavDropdown.Item href="logout">Logout</NavDropdown.Item>
+                                            </Fragment>
+                                        </NavDropdown>
+                                    </div>
+                                </>
+                            }
+                        </>}
 
-                            </>}
-                    </div>
+
+                    {!user &&
+                        <>
+                            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                                <li className="nav-item">
+                                    <Link className="nav-link text-white" to={"/"}>
+                                        Home
+                                    </Link>
+                                </li>
+                            </ul>
+                            <div className="d-flex input-group w-auto">
+                                <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                                    <li className="nav-item">
+                                        <Link className="nav-link text-white" to={"/login"}>
+                                            Login
+                                        </Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        <Link className="nav-link text-white" to={"/register"}>
+                                            Register
+                                        </Link>
+                                    </li>
+                                </ul>
+                            </div>
+                        </>
+                    }
+
+
                 </div>
             </div>
         </nav>
