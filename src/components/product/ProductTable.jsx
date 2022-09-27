@@ -22,8 +22,7 @@ export default function ProductTable({ products, units, onUpdate, allUsers, allU
     const [open, setOpen] = useState(false);
     const [openList, setOpenList] = useState(false);
     const [openConfirmDelDlg, setopenConfirmDelDlg] = useState(false);
-    //console.log("selectedProduct", selectedProduct)
-    //console.log("user", user)
+   
 
     return (<div>
 

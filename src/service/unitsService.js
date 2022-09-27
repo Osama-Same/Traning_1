@@ -6,10 +6,10 @@ async function _get() {
     return await httpService._get(tableName);  
 }
 async function _delete(id) {
-  await httpService._delete(id,tableName);
+ return  await httpService._delete(id,tableName);
 }
 async function _save(item) {
-  await httpService._save(item,arr,tableName)
+ return await httpService._save(item,arr,tableName)
  }
 export default{
   _get,

@@ -118,18 +118,7 @@ export default function Products({ user }) {
                                                 setselectedProductCategory(null)
                                         }}
                                     
-                                    /* if (category && category.subcategories) {
-                                                let result = []
-                                                for (let i = 0; i < category.subcategories.length; i++) {
-                                                    let arr = category.subcategories[i].products
-                                                    for (let j = 0; j < arr.length; j++) {
-                                                        result.push(arr[j])
-                                                    }
-        
-                                                }
-                                                console.log("category.subcategories", result);
-                                                //  setdispProducts(result)
-                                            } */
+                                
                                     />
 
                                 </div>

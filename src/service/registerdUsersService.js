@@ -10,7 +10,7 @@ async function _get() {
 //   await httpService._delete(id,tableName);
 // }
 async function _save(item) {
-  await httpService._save(item,arr,tableName)
+ return await httpService._save(item,arr,tableName)
  }
 
 async function getUserProfile(user){

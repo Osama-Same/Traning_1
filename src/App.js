@@ -13,6 +13,8 @@ import Units from "./components/units/Units";
 import UsersStore from "./components/usersStore/usersStore";
 import Home from "./components/home/Home";
 import { CategoriesAdminPage } from "./components/categories/CategoriesAdminPage";
+import { dividerClasses } from "@mui/material";
+import { ToastContainer } from "react-toastify";
 const App = () => {
   const [user, setUser] = useState(null);
   useEffect(() => {
@@ -24,7 +26,10 @@ const App = () => {
   }
   
   return (
+    <div>
+      <ToastContainer/>
     <BrowserRouter>
+
       <Navigation user={user} />
       <Routes>
         <Route path="/origins" element={<Origins user={user} />} />
@@ -44,6 +49,7 @@ const App = () => {
    
       </Routes>
     </BrowserRouter>
+    </div>
   );
 };
 

@@ -2,7 +2,7 @@ import React from 'react'
 import Box from '@mui/material/Box';
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
-import { CardActionArea, IconButton, CardActions } from '@mui/material';
+import { CardActionArea} from '@mui/material';
 function UserCard({ mainState, setMainState, user }) {
 
     if (!user) return <div>No User Profile</div>

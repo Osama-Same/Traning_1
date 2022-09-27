@@ -12,8 +12,11 @@ import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import Button from '@mui/material/Button';
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import userProductsOrdersService from '../../service/userProductsOrdersService';
+import { toast } from 'react-toastify';
+import Badge from '@mui/material/Badge';
 function ProductCard({ mainState, setMainState, userProduct }) {
+
 
     return (
         <>
@@ -27,21 +30,17 @@ function ProductCard({ mainState, setMainState, userProduct }) {
                 <MDBCard >
                     <MDBRow className='g-0'>
                         <CardHeader
-                            avatar={
-
-                                <Avatar alt="Remy Sharp" src={mainState.selectedUser.logo} />
-                            }
                             action={
                                 <IconButton aria-label="settings">
                                     <Chip
-                                        label={`$${userProduct.salesprice}${" "}${userProduct.product.unit.nameen}`}
+                                        label={mainState.language == 'EN' ? `$${userProduct.salesprice}${" "}${userProduct.product.unit.nameen}` : `$${userProduct.salesprice}${" "}${userProduct.product.unit.namear}`}
                                         color="primary"
                                         variant="outlined"
                                     />
                                 </IconButton>
                             }
-                            title={mainState.selectedUser.publishednameen}
-                            subheader={mainState.selectedUser.publishednamear}
+
+                            title={mainState.language == 'EN' ? userProduct.product.category.publishednameen : userProduct.product.category.publishednamear}
                         />
                         <MDBCol md='6'>
                             <CardMedia
@@ -64,7 +63,7 @@ function ProductCard({ mainState, setMainState, userProduct }) {
                                             <Avatar alt="Remy Sharp" src={userProduct.product.category.logo} />
                                         </Avatar>
                                     </ListItemAvatar>
-                                    <ListItemText primary={userProduct.product.category.publishednameen} />
+                                    <ListItemText primary={mainState.language == 'EN' ? userProduct.product.descriptionen : userProduct.product.descriptionar} />
                                 </ListItem>
                                 <ListItem button>
                                     {userProduct &&
@@ -76,7 +75,7 @@ function ProductCard({ mainState, setMainState, userProduct }) {
                                                             <Avatar alt="Remy Sharp" src={userProduct.product.brand.logo} />
                                                         </Avatar>
                                                     </ListItemAvatar>
-                                                    <ListItemText primary={userProduct.product.brand.nameen} />
+                                                    <ListItemText primary={mainState.language == 'EN' ? userProduct.product.brand.nameen : userProduct.product.brand.namear} />
                                                 </>
                                             }
                                         </>
@@ -88,28 +87,66 @@ function ProductCard({ mainState, setMainState, userProduct }) {
                                             <Avatar alt="Remy Sharp" src={userProduct.product.origin.flag} />
                                         </Avatar>
                                     </ListItemAvatar>
-                                    <ListItemText primary={userProduct.product.origin.nameen} />
+                                    <ListItemText primary={mainState.language == 'EN' ? userProduct.product.origin.nameen : userProduct.product.origin.namear} />
                                 </ListItem>
                                 <ListItem button>
                                     <CardActions disableSpacing>
-                                        <ListItemAvatar>
+                                        <ListItemAvatar >
+                                            <ListItemText primary={`${userProduct.product.quantity}${" "}${mainState.language == 'EN' ? userProduct.product.unit.nameen : userProduct.product.unit.namear}`} />
                                             {mainState.currentOrder &&
                                                 <>
-                                                    {mainState && (mainState.currentOrder !== null) &&
-                                                        <>
-                                                            <AddShoppingCartIcon color='primary' />
-                                                        </>
+                                                    {mainState && mainState.currentOrder &&
+                                                        <Badge badgeContent={userProduct.myOrder && userProduct.myOrder.quantity} color='secondary'>
+                                                            <Button
+                                                                title='Add to Cart'
+                                                                onClick={async () => {
+                                                                    userProduct.myOrder = mainState.currentOrder.userProducts.find(up => up.userproductid == userProduct.id);
+
+                                                                    if (userProduct.myOrder) {
+                                                                        userProduct.myOrder.quantity += 1;
+                                                                    }
+                                                                    else
+                                                                        userProduct.myOrder = {
+                                                                            id: 0,
+                                                                            orderid: mainState.currentOrder.id,
+                                                                            userproductid: userProduct.id,
+                                                                            quantity: 1,
+                                                                            unitprice: userProduct.salesprice,
+                                                                        }
+
+                                                                    mainState.loading = true;
+                                                                    setMainState({ ...mainState });
+                                                                    try {
+                                                                        const res = await userProductsOrdersService._save(userProduct.myOrder);
+                                                                        if (userProduct.myOrder.id == 0) {
+                                                                            if (res.insertId != 0) userProduct.myOrder.id = res.insertId;
+                                                                            mainState.currentOrder.userProducts = [userProduct.myOrder, ...mainState.currentOrder.userProducts]
+                                                                        }
+
+
+                                                                    } catch (error) {
+                                                                        toast.error('Server Error')
+
+                                                                    }
+                                                                    mainState.loading = false;
+                                                                    setMainState({ ...mainState });
+
+                                                                }}>
+                                                                <AddShoppingCartIcon color='primary' />
+                                                            </Button>
+                                                        </Badge>
                                                     }
                                                 </>
                                             }
-                                            <FavoriteIcon color='error' />
                                         </ListItemAvatar>
-                                        <Button size="small">Learn More</Button>
                                     </CardActions>
                                 </ListItem>
                             </List>
                         </MDBCol>
                     </MDBRow>
+                    <div className="card-footer text-center">
+                        {mainState.language == 'EN' ? userProduct.product.descriptionen : userProduct.product.descriptionar}
+                    </div>
                 </MDBCard>
             </Box>
         </>

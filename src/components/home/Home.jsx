@@ -9,12 +9,14 @@ import originsService from '../../service/originsService'
 import unitsService from '../../service/unitsService'
 import categoriesService from '../../service/categoriesService'
 import usersOrdersService from '../../service/usersOrdersService'
+import userProductsOrdersService from "../../service/userProductsOrdersService"
 import RenderState from "./RenderState"
-import MainToolBar from "./MainToolBar"
+import MainToolBar from './MainToolBar';
+import geolocation from "../../service/geolocation"
 
 //===============================================================================
 function linkState(newState) {
-    const { allProducts, allBrands, allUnits, allOrigins, allCategories, allUsersProfiles, allUseresProducts, allUsersOrders } = newState;
+    const { allProducts, allBrands, allUnits, allOrigins, allCategories, allUsersProfiles, allUseresProducts, allUsersOrders, allUserProductOrders } = newState;
 
     allProducts.forEach(product => {
         product.brand = allBrands.find(br => br.id == product.brandid);
@@ -28,25 +30,28 @@ function linkState(newState) {
         userProfile.userProducts.forEach(up => {
             up.product = allProducts.find(p => p.id == up.productid);
         })
-        userProfile.usersOrders = allUsersOrders.filter(up => up.userprofileid == userProfile.id);
-        userProfile.usersOrders.forEach(uo =>{
-            uo.userOrder = allUsersOrders.find(o => o.userprofileid == userProfile.id)
+
+        userProfile.orders = allUsersOrders.filter(o => o.userprofileid == userProfile.id);
+        userProfile.orders.forEach(userOrder => {
+            userOrder.userProducts = allUserProductOrders.filter(upo => upo.orderid == userOrder.id);
+            userOrder.userProducts.forEach(upo => {
+                upo.myUserProduct = userProfile.userProducts.find(up => up.id == upo.userproductid)
+            })
+
         })
 
     })
-
 }
 
 
 
 const Home = ({ user }) => {
-    const [mainState, setMainState] = useState({});
-    const [loading, setLoading] = useState(false)
+    const [mainState, setMainState] = useState({ loading: true, language: 'EN' });
+
     useEffect(() => {
         update()
     }, [user])
     const update = async () => {
-        setLoading(true);
         const _allUsersProfiles = await registerdUsersService._get();
         const newMainState = {};
         newMainState.allUsersProfiles = _allUsersProfiles;
@@ -64,24 +69,30 @@ const Home = ({ user }) => {
         newMainState.allUnits = _allUnits;
         const _allUsersOrders = await usersOrdersService._get()
         newMainState.allUsersOrders = _allUsersOrders
+        const _allUserProductOrders = await userProductsOrdersService._get()
+        newMainState.allUserProductOrders = _allUserProductOrders
+        const _geolocation = await geolocation._get()
+        newMainState.allgeolocation = _geolocation
         newMainState.currentOrder = null;
         linkState(newMainState);
-        if (!user)
+        if (!user) {
             newMainState.stage = 'user';
-
-        if (user && (user.authorization == 'user')) {
-            newMainState.selectedUser = _allUsersProfiles.find(u => u.userid == user.id);
-            newMainState.stage = 'product';
-      
+            newMainState.userProfile = null;
         }
+        if (user && (user.authorization == 'user')) {
 
+            newMainState.userProfile = _allUsersProfiles.find(u => u.userid == user.id);
+            newMainState.selectedUser = newMainState.userProfile;
+            newMainState.stage = 'product';
+        }
+        newMainState.loading = false;
         setMainState(newMainState);
-        setLoading(false);
+
     }
 
     return (
         <div>
-            {loading ?
+            {mainState.loading &&
                 <Box sx={{
                     top: 0,
                     left: 0,
@@ -94,15 +105,13 @@ const Home = ({ user }) => {
                 }}>
                     <CircularProgress /> Loading...
                 </Box>
-                :
-                <div>
-                    <MainToolBar mainState={mainState} setMainState={setMainState} user={user}/>
-
-                    <div className='container-fluid' style={{ marginTop: "5%", marginBottom: "5%" }}>
-                        <RenderState mainState={mainState} setMainState={setMainState} user={user} />
-                    </div>
-                </div>
             }
+            <div>
+                <MainToolBar mainState={mainState} setMainState={setMainState} />
+                <div className='container-fluid' style={{ marginTop: "5%", marginBottom: "5%" }}>
+                    <RenderState mainState={mainState} setMainState={setMainState} user={user} />
+                </div>
+            </div>
         </div>
     )
 }

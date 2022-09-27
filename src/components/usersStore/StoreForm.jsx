@@ -122,7 +122,7 @@ const StoreForm = ({ open, setOpen, store, onUpdate }) => {
                             <TextField
                                 fullWidth
                                 label="salesprice"
-                                onChange={(e) => setCostprice(e.target.value)}
+                                onChange={(e) => setSalesprice(e.target.value)}
                                 name="salesprice"
                                 value={salesprice}
                             />
