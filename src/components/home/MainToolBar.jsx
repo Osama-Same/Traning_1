@@ -7,6 +7,9 @@ import { IconButton } from '@mui/material';
 import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 import ConfirmDeleteDialog from '../common/ConfirmDeleteDialog'
 import usersOrdersService from '../../service/usersOrdersService';
+import myGoogleMaps from '../../service/geolocation';
+
+
 function MainToolBar({ mainState, setMainState }) {
     const [openConfirmDelDlg, setopenConfirmDelDlg] = useState(false);
     return (
@@ -75,6 +78,7 @@ function MainToolBar({ mainState, setMainState }) {
                             </li>
                             <li className="nav-item">
                                 {mainState.userProfile &&
+
                                     <Badge badgeContent={mainState.userProfile.orders && mainState.userProfile.orders.length} color='secondary'>
                                         <IconButton
                                             title='Orders'
@@ -88,7 +92,6 @@ function MainToolBar({ mainState, setMainState }) {
                                         </IconButton>
                                     </Badge>
                                 }
-
                             </li>
                             <li className="nav-item">
                                 {(mainState.currentOrder) &&
@@ -117,12 +120,9 @@ function MainToolBar({ mainState, setMainState }) {
                                             <Button
                                                 color="error"
                                                 title='Delete Order'
-
                                                 onClick={() => {
-
                                                     setopenConfirmDelDlg(true)
                                                     setMainState({ ...mainState });
-
                                                 }}
                                             >
                                                 <RemoveShoppingCartIcon />
@@ -131,8 +131,10 @@ function MainToolBar({ mainState, setMainState }) {
                                             <Button
                                                 color="primary"
                                                 title='new Order'
-                                                onClick={() => {
+                                                onClick={async () => {
                                                     mainState.stage = 'neworder';
+                                                    const _geolocation = await myGoogleMaps._getCurrentLocation()
+                                                    mainState.locationObject = _geolocation;
                                                     setMainState({ ...mainState });
                                                 }}
                                             >

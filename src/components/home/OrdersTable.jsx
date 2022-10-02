@@ -8,9 +8,8 @@ import TableBody from "@mui/material/TableBody";
 import Button from "@mui/material/Button";
 import usersOrdersService from "../../service/usersOrdersService"
 import ArticleIcon from '@mui/icons-material/Article';
+import usersProductsService from '../../service/usersProductsService';
 const OrdersTable = ({ mainState, setMainState, userOrder }) => {
-
-    console.log("userOrder", userOrder.status)
     return (
         <div className="container" style={{ marginTop: "5%", marginBottom: "5%" }}>
             <div>
@@ -33,8 +32,7 @@ const OrdersTable = ({ mainState, setMainState, userOrder }) => {
 
                         <TableBody>
                             {userOrder && userOrder.map((uo) =>
-
-                                <TableRow key={uo.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                                < TableRow key={uo.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                                     <TableCell align="center">{uo.id}</TableCell>
                                     <TableCell align="center">{uo.clientname}</TableCell>
                                     <TableCell align="center">{uo.clienttel}</TableCell>
@@ -52,7 +50,6 @@ const OrdersTable = ({ mainState, setMainState, userOrder }) => {
                                                     if (userProduct) userProduct.myOrder = upo;
                                                 });
                                                 setMainState({ ...mainState });
-
                                             }}
                                         >
                                             Order
@@ -64,29 +61,34 @@ const OrdersTable = ({ mainState, setMainState, userOrder }) => {
                                     <TableCell align="center">
                                         {uo.enddate}
                                     </TableCell>
+
                                     <TableCell align="center">
                                         <Button
                                             variant="contained"
                                             color="primary"
-                                            onClick={() => {
-                                                if (uo.status === 0) {
+                                            onClick={async () => {
+                                                if (uo.status == 0) {
                                                     mainState.loading = true;
                                                     setMainState({ ...mainState })
                                                     uo.status = 1
                                                     uo.enddate = new Date().toString()
-                                                    usersOrdersService._save(uo)
-                                                    mainState.loading = false;
-                                                    setMainState({ ...mainState })
-                                                } else {
-                                                    mainState.loading = true;
-                                                    setMainState({ ...mainState })
-                                                    uo.status = 0
-                                                    uo.enddate = ""
-                                                    usersOrdersService._save(uo)
+                                                    await usersOrdersService._save(uo);
+                                                    if (uo.userProducts) {
+                                                        for (const userProductOrder of uo.userProducts) {
+                                                            if (userProductOrder) {
+                                                                const userProduct = userProductOrder.myUserProduct;
+                                                                if (userProduct) {
+                                                                    userProduct.quantity -= userProductOrder.quantity;
+                                                                    await usersProductsService._save(userProduct);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
                                                     mainState.loading = false;
                                                     setMainState({ ...mainState })
                                                 }
-                                            }}>
+                                            }
+                                            }>
                                             <ArticleIcon />
                                         </Button>
                                     </TableCell>
@@ -102,16 +104,13 @@ const OrdersTable = ({ mainState, setMainState, userOrder }) => {
                                         </Button>
                                     </TableCell>
                                 </TableRow>
-
-
                             )}
-
                         </TableBody>
                     </Table>
                 </TableContainer>
             </div>
 
-        </div>
+        </div >
     )
 }
 

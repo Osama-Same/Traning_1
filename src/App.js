@@ -29,7 +29,6 @@ const App = () => {
     <div>
       <ToastContainer/>
     <BrowserRouter>
-
       <Navigation user={user} />
       <Routes>
         <Route path="/origins" element={<Origins user={user} />} />
@@ -46,7 +45,6 @@ const App = () => {
         <Route path="/profile" element={<Profile user={user} />} />
         <Route path="/UsersStore" element={<UsersStore user={user} />} />
         <Route path="/" element={<Home user={user} />} />
-   
       </Routes>
     </BrowserRouter>
     </div>

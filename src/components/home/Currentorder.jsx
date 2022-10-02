@@ -34,7 +34,6 @@ const UserProductOrderTableeRow = ({ mainState, setMainState, productOrder }) =>
                 {(editMode) ?
                     <div>
                         {(!mainState.userProfile) ?
-
                             < TextField
                                 label="quantity"
                                 type="number"
@@ -97,9 +96,7 @@ const UserProductOrderTableeRow = ({ mainState, setMainState, productOrder }) =>
                             mainState.loading = false;
                             setMainState({ ...mainState })
                         }
-
                         setEditMode(!editMode)
-
                     }}
                 >
                     {(editMode) ? <SaveIcon color='primary' /> : <EditIcon color='primary' />}
@@ -119,10 +116,8 @@ const getTotalPrice = ({ currentOrder }) => {
     if (!arr) return totalPrice;
     arr.forEach(productOrder => {
         totalPrice += productOrder.quantity * productOrder.unitprice;
-
     });
     return totalPrice;
-
 }
 //----------------------------------------------------------------------------------------------
 const CurrentOrder = ({ mainState, setMainState }) => {

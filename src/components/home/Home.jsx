@@ -12,7 +12,7 @@ import usersOrdersService from '../../service/usersOrdersService'
 import userProductsOrdersService from "../../service/userProductsOrdersService"
 import RenderState from "./RenderState"
 import MainToolBar from './MainToolBar';
-import geolocation from "../../service/geolocation"
+
 
 //===============================================================================
 function linkState(newState) {
@@ -31,7 +31,7 @@ function linkState(newState) {
             up.product = allProducts.find(p => p.id == up.productid);
         })
 
-        userProfile.orders = allUsersOrders.filter(o => o.userprofileid == userProfile.id);
+        userProfile.orders = allUsersOrders.filter(o => (o.userprofileid == userProfile.id) /* && (o.status == 0) */);
         userProfile.orders.forEach(userOrder => {
             userOrder.userProducts = allUserProductOrders.filter(upo => upo.orderid == userOrder.id);
             userOrder.userProducts.forEach(upo => {
@@ -71,16 +71,14 @@ const Home = ({ user }) => {
         newMainState.allUsersOrders = _allUsersOrders
         const _allUserProductOrders = await userProductsOrdersService._get()
         newMainState.allUserProductOrders = _allUserProductOrders
-        const _geolocation = await geolocation._get()
-        newMainState.allgeolocation = _geolocation
         newMainState.currentOrder = null;
+        newMainState.locationObject = null;
         linkState(newMainState);
         if (!user) {
             newMainState.stage = 'user';
             newMainState.userProfile = null;
         }
         if (user && (user.authorization == 'user')) {
-
             newMainState.userProfile = _allUsersProfiles.find(u => u.userid == user.id);
             newMainState.selectedUser = newMainState.userProfile;
             newMainState.stage = 'product';
@@ -109,7 +107,7 @@ const Home = ({ user }) => {
             <div>
                 <MainToolBar mainState={mainState} setMainState={setMainState} />
                 <div className='container-fluid' style={{ marginTop: "5%", marginBottom: "5%" }}>
-                    <RenderState mainState={mainState} setMainState={setMainState} user={user} />
+                    <RenderState mainState={mainState} setMainState={setMainState} />
                 </div>
             </div>
         </div>

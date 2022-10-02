@@ -15,9 +15,8 @@ import Button from '@mui/material/Button';
 import userProductsOrdersService from '../../service/userProductsOrdersService';
 import { toast } from 'react-toastify';
 import Badge from '@mui/material/Badge';
+
 function ProductCard({ mainState, setMainState, userProduct }) {
-
-
     return (
         <>
             <Box

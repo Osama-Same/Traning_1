@@ -1,6 +1,6 @@
 import httpService from "./httpService";
 const tableName = "usersorders";
-const arr = ["clientname" , "clienttel" ,"userprofileid" ,"startdate","enddate","status"] ;
+const arr = ["clientname" , "clienttel" ,"userprofileid" ,"startdate","enddate","status","latitude" ,"longitude"] ;
 
 async function _get() {
   return await httpService._get(tableName);  
