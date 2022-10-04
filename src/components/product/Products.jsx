@@ -84,7 +84,7 @@ export default function Products({ user }) {
                             style={{ marginTop: "5%", marginBottom: "5%" }}
                         >
                             <div className='row'>
-                                <div className='col-4'>
+                                <div className='col'>
 
                                     <AutoCompleteSelect
                                         textLabel='Brand'

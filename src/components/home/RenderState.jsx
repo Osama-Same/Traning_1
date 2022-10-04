@@ -3,6 +3,8 @@ import ItemCard from "./ItemCard"
 import NewOrderForm from "./NewOrderForm"
 import OrdersTable from "./OrdersTable"
 import CurrentOrder from "./Currentorder"
+import EndOrders from "./EndOrders"
+
 
 function RenderState({ mainState, setMainState }) {
     console.log("mainState", mainState)
@@ -24,7 +26,11 @@ function RenderState({ mainState, setMainState }) {
         let userOrder = mainState.selectedUser.orders
         return (<OrdersTable mainState={mainState} setMainState={setMainState} userOrder={userOrder} />)
     }
-
+    else if (mainState.stage == 'EndOrders') {
+        let userOrder = mainState.selectedUser.orders
+        return (<EndOrders mainState={mainState} setMainState={setMainState} userOrder={userOrder} />)
+    }
+  
 
     return (
         <div className='row'>

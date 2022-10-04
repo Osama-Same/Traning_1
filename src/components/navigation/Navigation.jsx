@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
 const Navigation = ({ user }) => {
-    // console.log(user, 'users')
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
             <div className="container-fluid">
@@ -84,11 +83,6 @@ const Navigation = ({ user }) => {
                                             </Link>
                                         </li>
                                         <li className="nav-item">
-                                            <Link className="nav-link text-white" to={"/product"}>
-                                                Products
-                                            </Link>
-                                        </li>
-                                        <li className="nav-item">
                                             <Link className="nav-link text-white" to={"/UsersStore"}>
                                                 Users Store
                                             </Link>
@@ -97,6 +91,9 @@ const Navigation = ({ user }) => {
                                     </ul>
                                     <div className="d-flex input-group w-auto">
                                         <NavDropdown title={user.name} id="basic-nav-dropdown" style={{ color: "white" }}>
+                                            <Fragment>
+                                                <NavDropdown.Item href="profile">profile</NavDropdown.Item>
+                                            </Fragment>
                                             <Fragment>
                                                 <NavDropdown.Item href="logout">Logout</NavDropdown.Item>
                                             </Fragment>

@@ -31,7 +31,7 @@ function linkState(newState) {
             up.product = allProducts.find(p => p.id == up.productid);
         })
 
-        userProfile.orders = allUsersOrders.filter(o => (o.userprofileid == userProfile.id) /* && (o.status == 0) */);
+        userProfile.orders = allUsersOrders.filter(o => (o.userprofileid == userProfile.id)  /* && (o.status == 0) */ );
         userProfile.orders.forEach(userOrder => {
             userOrder.userProducts = allUserProductOrders.filter(upo => upo.orderid == userOrder.id);
             userOrder.userProducts.forEach(upo => {

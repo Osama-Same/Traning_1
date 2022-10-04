@@ -17,6 +17,7 @@ import { toast } from 'react-toastify';
 import Badge from '@mui/material/Badge';
 
 function ProductCard({ mainState, setMainState, userProduct }) {
+  
     return (
         <>
             <Box
@@ -62,7 +63,7 @@ function ProductCard({ mainState, setMainState, userProduct }) {
                                             <Avatar alt="Remy Sharp" src={userProduct.product.category.logo} />
                                         </Avatar>
                                     </ListItemAvatar>
-                                    <ListItemText primary={mainState.language == 'EN' ? userProduct.product.descriptionen : userProduct.product.descriptionar} />
+                                    <ListItemText primary={mainState.language === 'EN' ? userProduct.product.descriptionen : userProduct.product.descriptionar} />
                                 </ListItem>
                                 <ListItem button>
                                     {userProduct &&
@@ -86,7 +87,7 @@ function ProductCard({ mainState, setMainState, userProduct }) {
                                             <Avatar alt="Remy Sharp" src={userProduct.product.origin.flag} />
                                         </Avatar>
                                     </ListItemAvatar>
-                                    <ListItemText primary={mainState.language == 'EN' ? userProduct.product.origin.nameen : userProduct.product.origin.namear} />
+                                    <ListItemText primary={mainState.language === 'EN' ? userProduct.product.origin.nameen : userProduct.product.origin.namear} />
                                 </ListItem>
                                 <ListItem button>
                                     <CardActions disableSpacing>

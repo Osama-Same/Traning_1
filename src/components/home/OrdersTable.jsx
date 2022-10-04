@@ -9,7 +9,8 @@ import Button from "@mui/material/Button";
 import usersOrdersService from "../../service/usersOrdersService"
 import ArticleIcon from '@mui/icons-material/Article';
 import usersProductsService from '../../service/usersProductsService';
-const OrdersTable = ({ mainState, setMainState, userOrder }) => {
+const OrdersTable = ({ mainState, setMainState }) => {
+
     return (
         <div className="container" style={{ marginTop: "5%", marginBottom: "5%" }}>
             <div>
@@ -31,7 +32,10 @@ const OrdersTable = ({ mainState, setMainState, userOrder }) => {
                         </TableHead>
 
                         <TableBody>
-                            {userOrder && userOrder.map((uo) =>
+
+
+                            {mainState.startOrders && mainState.startOrders.map((uo) =>
+
                                 < TableRow key={uo.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                                     <TableCell align="center">{uo.id}</TableCell>
                                     <TableCell align="center">{uo.clientname}</TableCell>
@@ -49,6 +53,7 @@ const OrdersTable = ({ mainState, setMainState, userOrder }) => {
                                                     const userProduct = mainState.userProfile.userProducts.find(up => up.id == upo.userproductid);
                                                     if (userProduct) userProduct.myOrder = upo;
                                                 });
+                                                mainState.loading = false;
                                                 setMainState({ ...mainState });
                                             }}
                                         >
@@ -97,6 +102,7 @@ const OrdersTable = ({ mainState, setMainState, userOrder }) => {
                                             mainState.loading = true;
                                             setMainState({ ...mainState })
                                             usersOrdersService._delete(uo.id)
+
                                             mainState.loading = false;
                                             setMainState({ ...mainState })
                                         }}>
@@ -104,7 +110,12 @@ const OrdersTable = ({ mainState, setMainState, userOrder }) => {
                                         </Button>
                                     </TableCell>
                                 </TableRow>
+
+
                             )}
+
+
+
                         </TableBody>
                     </Table>
                 </TableContainer>

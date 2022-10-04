@@ -117,7 +117,7 @@ const NewOrderForm = ({ mainState, setMainState }) => {
                     </div>
                     <div className='col'>
                         <LoadScript
-                            googleMapsApiKey="448ff6aa8a9b4f84b6934e42836cec97"
+                            googleMapsApiKey="AIzaSyA1eI47U7hmDUcOcTUYgTlHtUDCxBH_DKc"
                         >
                             <GoogleMap
                                 mapContainerStyle={containerStyle}

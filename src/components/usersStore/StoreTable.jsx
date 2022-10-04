@@ -14,7 +14,6 @@ const StoreTable = ({ userProducts, onUpdate }) => {
     const [selectedStore, setSelectedStore] = useState(null);
     const [openConfirmDelDlg, setopenConfirmDelDlg] = useState(false);
     const [open, setOpen] = useState(false);
-    console.log('store', userProducts);
     return (
         <div>
             <TableContainer >

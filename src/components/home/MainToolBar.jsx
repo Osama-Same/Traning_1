@@ -8,169 +8,176 @@ import RemoveShoppingCartIcon from '@mui/icons-material/RemoveShoppingCart';
 import ConfirmDeleteDialog from '../common/ConfirmDeleteDialog'
 import usersOrdersService from '../../service/usersOrdersService';
 import myGoogleMaps from '../../service/geolocation';
+import ListAltIcon from '@mui/icons-material/ListAlt';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Avatar from '@mui/material/Avatar';
 
+const MainToolBar = ({ mainState, setMainState }) => {
 
-function MainToolBar({ mainState, setMainState }) {
     const [openConfirmDelDlg, setopenConfirmDelDlg] = useState(false);
-    return (
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div className="container-fluid">
-                <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li className="nav-item">
+    let endOrders = mainState.userProfile && mainState.userProfile.orders.filter(o => o.status === 1)
+    let startOrders = mainState.userProfile && mainState.userProfile.orders.filter(o => o.status === 0)
+    return (<div>
+        <Box sx={{ flexGrow: 1 }}>
+            <AppBar position="static">
+                <Toolbar>
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        sx={{ mr: 2 }}
+                    >
+                        <Avatar alt={mainState.selectedUser && mainState.selectedUser.logo} src={mainState.selectedUser && mainState.selectedUser.logo} />
+                    </IconButton>
+                    <Typography sx={{ flexGrow: 1 }}>
                         {mainState.selectedUser &&
-                            <Typography sx={{ flexGrow: 1 }}>
-                                <IconButton
-                                    sx={{ color: "white" }}
-                                    onClick={() => {
-                                        const newState = { ...mainState };
-                                        newState.stage = 'user';
-                                        setMainState(newState);
-                                    }}
-                                >
-                                    {mainState.selectedUser.publishednameen}
-                                </IconButton>
-                            </Typography>}
-                    </li>
-                    <li className="nav-item">
-                        {mainState.selectedUser &&
-                            <Typography sx={{ flexGrow: 1 }}>
-                                <IconButton
-                                    sx={{ color: "white" }}
-                                    onClick={() => {
-                                        const newState = { ...mainState };
-                                        newState.stage = 'product';
-                                        setMainState(newState);
-                                    }}
-                                >
-                                    Products
-                                </IconButton>
-                            </Typography>
+                            <IconButton
+                                sx={{ color: "white", fontSize: 15 }}
+                                onClick={() => {
+                                    const newState = { ...mainState };
+                                    newState.stage = 'user';
+                                    setMainState(newState);
+                                }}
+                            >
+                                {mainState.selectedUser.publishednameen}
+                            </IconButton>
                         }
-                    </li>
-                </ul>
-                <button
-                    className="navbar-toggler"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarNavDarkDropdown"
-                    aria-controls="navbarNavDarkDropdown"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation"
-                >
-                    <span className="navbar-toggler-icon"></span>
-                </button>
-                <div className="collapse navbar-collapse" id="navbarNavDarkDropdown">
-                    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li className="nav-item">
-                        </li>
-                    </ul>
-                    <div className="d-flex input-group w-auto">
-                        <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li className="nav-item">
-                                <Button
-                                    onClick={() => {
-                                        mainState.language = (mainState.language == 'EN') ? 'AR' : 'EN';
-                                        setMainState({ ...mainState })
-                                    }}
-                                >
-                                    {mainState.language == 'EN' ? `AR` : `EN`}
-                                </Button>
-                            </li>
-                            <li className="nav-item">
-                                {mainState.userProfile &&
+                    </Typography>
+                    <Typography sx={{ flexGrow: 1 }}>
 
-                                    <Badge badgeContent={mainState.userProfile.orders && mainState.userProfile.orders.length} color='secondary'>
+                        {mainState.selectedUser &&
+                            <>
+                                {mainState && (mainState.stage === "product" || mainState.stage === "EndOrders" || mainState.stage === "allorders") &&
+                                    <IconButton
+                                        sx={{ color: "white", fontSize: 15 }}
+                                        onClick={() => {
+                                            const newState = { ...mainState };
+                                            newState.stage = 'product';
+                                            setMainState(newState);
+                                        }}
+                                    >
+                                        Products
+                                    </IconButton>
+                                }
+                            </>
+                        }
+                    </Typography>
+                    <Button
+                        color="inherit"
+                        onClick={() => {
+                            mainState.language = (mainState.language === 'EN') ? 'AR' : 'EN';
+                            setMainState({ ...mainState })
+                        }}
+                    >
+                        {mainState.language === 'EN' ? `AR` : `EN`}
+                    </Button>
+                    {mainState.userProfile &&
+                        <>
+                            {mainState && (mainState.stage === "product" || mainState.stage === "EndOrders" || mainState.stage === "allorders") &&
+                                <>
+                                    <Badge badgeContent={endOrders && endOrders.length} color='secondary'>
+                                        <IconButton
+                                            title=' End Orders'
+                                            color="inherit"
+                                            onClick={() => {
+                                                mainState.stage = 'EndOrders';
+                                                mainState.endOrders = endOrders;
+                                                setMainState({ ...mainState });
+                                            }}
+                                        >
+                                            <ListAltIcon />
+                                        </IconButton>
+                                    </Badge>
+                                    <Badge badgeContent={startOrders && startOrders.length} color='secondary'>
                                         <IconButton
                                             title='Orders'
-                                            color="primary"
+                                            color="inherit"
                                             onClick={() => {
                                                 mainState.stage = 'allorders';
+                                                mainState.startOrders = startOrders;
                                                 setMainState({ ...mainState });
                                             }}
                                         >
                                             <AddShoppingCartIcon />
                                         </IconButton>
                                     </Badge>
-                                }
-                            </li>
-                            <li className="nav-item">
-                                {(mainState.currentOrder) &&
-                                    <div>
-                                        <span className='mx-2' style={{ color: "white" }}>{mainState.currentOrder.clientname} </span>
-                                        <Badge badgeContent={mainState.currentOrder.userProducts && mainState.currentOrder.userProducts.length} color='primary'
-                                        >
-                                            <IconButton
-                                                title='Shopping Cart '
-                                                color="primary"
-                                                onClick={() => {
-                                                    mainState.stage = 'currentorder';
-                                                    setMainState({ ...mainState });
-                                                }}
-                                            >
-                                                <AddShoppingCartIcon />
-                                            </IconButton>
-                                        </Badge>
-                                    </div>
-                                }
-                            </li>
-                            <li className="nav-item">
-                                {(!mainState.userProfile && mainState.selectedUser &&
-                                    <div>
-                                        {(mainState.currentOrder) ?
-                                            <Button
-                                                color="error"
-                                                title='Delete Order'
-                                                onClick={() => {
-                                                    setopenConfirmDelDlg(true)
-                                                    setMainState({ ...mainState });
-                                                }}
-                                            >
-                                                <RemoveShoppingCartIcon />
-                                            </Button>
-                                            :
-                                            <Button
-                                                color="primary"
-                                                title='new Order'
-                                                onClick={async () => {
-                                                    mainState.stage = 'neworder';
-                                                    const _geolocation = await myGoogleMaps._getCurrentLocation()
-                                                    mainState.locationObject = _geolocation;
-                                                    setMainState({ ...mainState });
-                                                }}
-                                            >
-                                                New Order
-                                            </Button>
-                                        }
-                                    </div>
-                                )}
-                            </li>
+                                </>
+                            }
+                        </>
+                    }
+                    {(mainState.currentOrder) &&
+                        <div>
+                            <span className='mx-2' style={{ color: "white" }}>{mainState.currentOrder.clientname} </span>
+                            <Badge badgeContent={mainState.currentOrder.userProducts && mainState.currentOrder.userProducts.length} color='primary'
+                            >
+                                <IconButton
+                                    title='Shopping Cart '
+                                    color="inherit"
+                                    onClick={() => {
+                                        mainState.stage = 'currentorder';
+                                        setMainState({ ...mainState });
+                                    }}
+                                >
+                                    <AddShoppingCartIcon />
+                                </IconButton>
+                            </Badge>
+                        </div>
+                    }
+                    {(!mainState.userProfile && mainState.selectedUser &&
+                        <div>
+                            {(mainState.currentOrder) ?
+                                <Button
+                                    color="error"
+                                    title='Delete Order'
+                                    onClick={() => {
+                                        setopenConfirmDelDlg(true)
+                                        setMainState({ ...mainState });
+                                    }}
+                                >
+                                    <RemoveShoppingCartIcon />
+                                </Button>
+                                :
+                                <Button
+                                    color="inherit"
+                                    title='new Order'
+                                    onClick={async () => {
+                                        mainState.stage = 'neworder';
+                                        const _geolocation = await myGoogleMaps._getCurrentLocation()
+                                        mainState.locationObject = _geolocation;
+                                        setMainState({ ...mainState });
+                                    }}
+                                >
+                                    New Order
+                                </Button>
+                            }
+                        </div>
+                    )}
+                </Toolbar>
+            </AppBar>
+        </Box>
+        <ConfirmDeleteDialog
+            open={openConfirmDelDlg}
+            setopen={setopenConfirmDelDlg}
+            text={`Order ${mainState.currentOrder && mainState.currentOrder.clientname}  will be deleted permenantly, are you sure?`}
+            onConfirm={async () => {
+                if (!mainState.currentOrder) return;
+                mainState.loading = true;
+                setMainState({ ...mainState })
 
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <ConfirmDeleteDialog
-                open={openConfirmDelDlg}
-                setopen={setopenConfirmDelDlg}
-                text={`Order ${mainState.currentOrder && mainState.currentOrder.clientname}  will be deleted permenantly, are you sure?`}
-                onConfirm={async () => {
-                    if (!mainState.currentOrder) return;
-                    mainState.loading = true;
-                    setMainState({ ...mainState })
+                await usersOrdersService._delete(mainState.currentOrder.id);
+                mainState.currentOrder.userProducts.forEach(upo => {
+                    const userProduct = mainState.selectedUser.userProducts.find(up => up.id == upo.userproductid);
+                    if (userProduct && userProduct.myOrder) userProduct.myOrder = null;
+                });
 
-                    await usersOrdersService._delete(mainState.currentOrder.id);
-                    mainState.currentOrder.userProducts.forEach(upo => {
-                        const userProduct = mainState.selectedUser.userProducts.find(up => up.id == upo.userproductid);
-                        if (userProduct && userProduct.myOrder) userProduct.myOrder = null;
-                    });
-
-                    mainState.currentOrder = null;
-                    mainState.loading = false;
-                    setMainState({ ...mainState })
-                }} />
-        </nav >
+                mainState.currentOrder = null;
+                mainState.loading = false;
+                setMainState({ ...mainState })
+            }} />
+    </div>
     )
-
-
 }
 export default MainToolBar

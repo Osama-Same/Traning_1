@@ -10,18 +10,19 @@ import userProductsOrdersService from "../../service/userProductsOrdersService"
 import { IconButton } from 'rsuite';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
-
+import Button from "@mui/material/Button";
+import ConfirmDeleteDialog from '../common/ConfirmDeleteDialog'
 const UserProductOrderTableeRow = ({ mainState, setMainState, productOrder }) => {
     const [unitprice, setUnitPrice] = useState(productOrder ? productOrder.unitprice : 0)
     const [quantity, setQuantity] = useState(productOrder ? productOrder.quantity : 0)
     const [editMode, setEditMode] = useState(false);
+    const [openConfirmDelDlg, setopenConfirmDelDlg] = useState(false);
 
     if (!mainState.currentOrder) return (<div>No Order</div>)
     const userProfile = mainState.allUsersProfiles.find(up => up.id == mainState.currentOrder.userprofileid);
     if (!userProfile) return (<div>No User Profile</div>)
     const userProducts = userProfile.userProducts;
     const userproduct = userProducts.find(up => up.id == productOrder.userproductid)
-
 
     return (
         <TableRow key={productOrder.id} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
@@ -102,10 +103,37 @@ const UserProductOrderTableeRow = ({ mainState, setMainState, productOrder }) =>
                     {(editMode) ? <SaveIcon color='primary' /> : <EditIcon color='primary' />}
                 </IconButton>
             </TableCell>
+            <TableCell align="center">
+                <Button color='error' variant="contained" onClick={() => {
+                    setopenConfirmDelDlg(true);
+                    setMainState({ ...mainState });
+                }}>
+                    Delete
+                </Button>
+            </TableCell>
+
             <TableCell align="center">{productOrder.unitprice * productOrder.quantity}</TableCell>
+            <ConfirmDeleteDialog
+                open={openConfirmDelDlg}
+                setopen={setopenConfirmDelDlg}
+                text={`Order  ${userproduct.product.category.publishednameen}  will be deleted permenantly, are you sure?`}
+                onConfirm={async () => {
+                    if (!mainState.currentOrder) return;
+                    mainState.loading = true;
+                    setMainState({ ...mainState })
+                    mainState.currentOrder.userProducts = mainState.currentOrder.userProducts.filter(up => up.id != productOrder.id)
+                    await userProductsOrdersService._delete(productOrder.id);
+
+                    if (mainState.selectedUser && mainState.selectedUser.userProducts) {
+                        const userProduct = mainState.selectedUser.userProducts.find(up => up.id == productOrder.userproductid);
+                        if (userProduct && userProduct.myOrder) userProduct.myOrder = null;
+                    }
+
+                    mainState.loading = false;
+                    setMainState({ ...mainState })
+                }}
+            />
         </TableRow>
-
-
     )
 }
 
@@ -151,10 +179,12 @@ const CurrentOrder = ({ mainState, setMainState }) => {
                                 <TableCell align="center">quantity</TableCell>
                                 <TableCell align="center">unitprice</TableCell>
                                 <TableCell align="center">Save</TableCell>
+                                <TableCell align="center">Delete</TableCell>
                                 <TableCell align="center">Price</TableCell>
 
                             </TableRow>
                         </TableHead>
+
                         <TableBody>
                             {currentOrder.userProducts && currentOrder.userProducts.map((productOrder) => (
                                 <UserProductOrderTableeRow mainState={mainState} setMainState={setMainState} productOrder={productOrder} />
